@@ -7,6 +7,7 @@ gem 'rails', '3.2.14'
 
 gem 'sqlite3'
 gem 'mysql2', :git => "https://github.com/brianmario/mysql2.git"
+gem 'nokogiri'
 
 
 # Gems used only for assets and not required
