@@ -11,12 +11,31 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130905140323) do
+ActiveRecord::Schema.define(:version => 20130906132306) do
 
   create_table "competitions", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "competitions_players_metrics", :force => true do |t|
+    t.integer  "competition_id_id"
+    t.integer  "player_id_id"
+    t.integer  "metric_id_id"
+    t.integer  "quantity"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  create_table "competitions_teams_metrics", :force => true do |t|
+    t.integer  "competition_id_id"
+    t.integer  "team_id_id"
+    t.integer  "metric_id_id"
+    t.integer  "quantity"
+    t.integer  "rank"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
   create_table "matches", :force => true do |t|
@@ -46,6 +65,23 @@ ActiveRecord::Schema.define(:version => 20130905140323) do
     t.datetime "updated_at",   :null => false
   end
 
+  create_table "matches_players_statistics", :force => true do |t|
+    t.integer  "match_id_id"
+    t.integer  "player_id_id"
+    t.integer  "team_id_id"
+    t.integer  "position_id_id"
+    t.integer  "statistic_id_id"
+    t.integer  "quantity"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  create_table "metrics", :force => true do |t|
+    t.string   "metric"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "players", :force => true do |t|
     t.string   "name"
     t.datetime "created_at",    :null => false
@@ -53,6 +89,12 @@ ActiveRecord::Schema.define(:version => 20130905140323) do
     t.date     "date_of_birth"
     t.integer  "weight"
     t.integer  "heigth"
+  end
+
+  create_table "positions", :force => true do |t|
+    t.string   "position"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "rankings", :force => true do |t|
@@ -86,6 +128,12 @@ ActiveRecord::Schema.define(:version => 20130905140323) do
 
   create_table "seasons", :force => true do |t|
     t.integer  "season"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "statistics", :force => true do |t|
+    t.string   "statistic"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
