@@ -11,12 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130906145123) do
+ActiveRecord::Schema.define(:version => 20130908134122) do
 
   create_table "competitions", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "long_name"
+    t.string   "short_name"
   end
 
   create_table "competitions_players_metrics", :force => true do |t|
@@ -88,7 +90,11 @@ ActiveRecord::Schema.define(:version => 20130906145123) do
     t.datetime "updated_at",    :null => false
     t.date     "date_of_birth"
     t.integer  "weight"
-    t.integer  "heigth"
+    t.integer  "height"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.integer  "team_id"
+    t.string   "headshot"
   end
 
   create_table "positions", :force => true do |t|
@@ -142,7 +148,7 @@ ActiveRecord::Schema.define(:version => 20130906145123) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.integer  "team_id"
+    t.string   "jersey"
   end
 
   create_table "teams_venues", :id => false, :force => true do |t|

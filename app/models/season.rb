@@ -1,3 +1,3 @@
 class Season < ActiveRecord::Base
-  # attr_accessible :title, :body
+  attr_accessible :id, :season
 end
