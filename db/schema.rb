@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130908134122) do
+ActiveRecord::Schema.define(:version => 20130908135752) do
 
   create_table "competitions", :force => true do |t|
     t.string   "name"
@@ -90,7 +90,7 @@ ActiveRecord::Schema.define(:version => 20130908134122) do
     t.datetime "updated_at",    :null => false
     t.date     "date_of_birth"
     t.integer  "weight"
-    t.integer  "height"
+    t.integer  "heigth"
     t.string   "first_name"
     t.string   "last_name"
     t.integer  "team_id"

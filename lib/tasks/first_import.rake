@@ -58,5 +58,62 @@ namespace :first_import do
       end
   end
 
+  desc "VENUES IMPORT"
+  task :venues => :environment do
+    require 'nokogiri'
+    require 'open-uri'
+
+    docs = Array.new
+    docs[0] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU45'
+    docs[1] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU45'
+    docs[2] = 'http://playground.opta.net/competition.php?competition=3&season_id=2013&feed_type=RU45'
+    docs[3] = 'http://playground.opta.net/competition.php?competition=215&season_id=2011&feed_type=RU45'
+    docs[4] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU45'
+
+    docs.each do |d|
+      doc = Nokogiri::XML(open(d))
+      stadia = doc.xpath("OptaFeed/OptaDocument/stadium")
+      new_venue = Hash.new
+      stadia.each do |s|
+        new_venue[:id] = s.xpath("@venue_id").text
+        new_venue[:capacity] = s.xpath("@capacity").text
+        new_venue[:name] = s.xpath("@venue").text
+        address = s.xpath("address")
+        new_venue[:address] = address.xpath("@street").text
+        new_venue[:city] = address.xpath("@city").text
+        new_venue[:country] = address.xpath("@country").text
+        affiliation = s.xpath("affiliation")
+        new_venue[:affiliation] = affiliation.xpath("@country").text
+        gps = s.xpath("gps")
+        new_venue[:latitude] = gps.xpath("@latitude").text
+        new_venue[:longitude] = gps.xpath("@longitude").text
+        venue = Venue.new(new_venue)
+        if venue.valid?
+          venue.save
+          teams = s.xpath("team")
+          teams.each do |t|
+            team = Team.where("id=?",t.xpath("@id").text)
+            Rails.logger.debug("VENUE-------->#{team}")
+            if team.blank?
+              new_team = Hash.new
+              new_team[:id] = t.xpath("@id").text
+              new_team[:name] = t.xpath("@name").text
+
+              nt = Team.new(new_team)
+              if nt.valid?
+                nt.save
+
+                team = Team.where("id=?",t.xpath("@id").text)
+                venue.teams = team
+              end
+            else
+              venue.teams = team
+            end
+          end
+        end
+      end
+    end
+  end
+
 
 end
