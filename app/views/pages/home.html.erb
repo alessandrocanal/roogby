@@ -1,0 +1,25 @@
+<div>
+    <input type="text" class="roogby-finder typeahead" id="form-wide-name" placeholder="Players, Teams, Competition ..." name="search_text">
+</div>
+
+<script src="http://twitter.github.com/hogan.js/builds/2.0.0/hogan-2.0.0.js"></script>
+<script type='text/javascript'>
+    $(document).ready(function() {
+        $('.roogby-finder').typeahead([{
+                name: 'restaurants_<%= I18n.locale %>',
+                valueKey: 'name',
+                prefetch: {
+                    url: '/api/players_search.json',
+                    ttl: 3600000
+                },
+                limit: 7,
+                header:'<p class="hh-header">Players</p>',
+                template: '<p><strong>{{name}}</strong>, <em>{{name2}}</em>&nbsp;({{team}})</p>',
+                engine: Hogan
+
+            }
+
+
+        ])
+    });
+</script>
