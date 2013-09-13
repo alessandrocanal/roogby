@@ -16,6 +16,7 @@ class Player < ActiveRecord::Base
         raw['name2'] = p.first_name.to_s
         raw['team'] = p.team.name.to_s
         raw['tokens'] = [p.last_name] + p.last_name.split
+        raw['page_type'] = 'players'
         response << raw
       end
       response
