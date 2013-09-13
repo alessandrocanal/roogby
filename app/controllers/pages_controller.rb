@@ -8,7 +8,7 @@ class PagesController < ApplicationController
     @opengraph['image'] = ""
     @opengraph['url'] = root_url
 
-    @seasons = Season.all
+    @seasons = Season.order("id DESC")
     render :layout => 'home'
   end
 end

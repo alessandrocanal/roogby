@@ -36,7 +36,7 @@
 <div class="carousel slide">
   <div class="carousel-inner">
     <div class="item active">
-      <img src="/assets/scrum.png" style="height: 600px; width: 100%; display: block;" />
+      <img src="/assets/scrum.jpg" style="height: 600px; width: 100%; display: block;" />
     </div>
     <div class="container">
         <div class="carousel-caption">
@@ -84,7 +84,7 @@
                     ttl: 3600000
                 },
                 limit: 7,
-                header:'<p class="hh-header">Players</p>',
+                header:'<p class="suggestion-header">Players</p>',
                 template: '<p><strong>{{name}}</strong>, <em>{{name2}}</em>&nbsp;({{team}})</p>',
                 engine: Hogan
 
@@ -96,7 +96,19 @@
                     ttl: 3600000
                 },
                 limit: 7,
-                header:'<p class="hh-header">Teams</p>',
+                header:'<p class="suggestion-header">Teams</p>',
+                template: '<p><strong>{{name}}</strong></p>',
+                engine: Hogan
+
+            },
+            {   name: 'competitions',
+                valueKey: 'name',
+                prefetch: {
+                    url: '/api/competitions_search.json',
+                    ttl: 3600000
+                },
+                limit: 7,
+                header:'<p class="suggestion-header">Competitions</p>',
                 template: '<p><strong>{{name}}</strong></p>',
                 engine: Hogan
 
