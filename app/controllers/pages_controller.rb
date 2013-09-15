@@ -11,4 +11,17 @@ class PagesController < ApplicationController
     @seasons = Season.order("id DESC")
     render :layout => 'home'
   end
+
+  def traffic_redirection
+    if !params[:page_kind].blank?
+      if params[:page_kind] == 'players'
+        @player = Player.find(params['value_id'])
+        redirect_to @player
+      elsif params[:page_kind] == 'teams'
+      elsif params[:page_kind] == 'competitions'
+      end
+    else
+
+    end
+  end
 end

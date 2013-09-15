@@ -43,11 +43,11 @@
             <h1>Roogby, googling rugby</h1>
             <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
 
-            <%= form_tag "", :method => :get, :class => '', :id => 'home-search-form', :role => 'form' do %>
+            <%= form_tag traffic_redirection_pages_path, :method => :post, :class => '', :id => 'home-search-form' do %>
               <div class="row">
                 <div class="col-md-6"><input type="text" class="form-control typeahead roogby-finder" id="form-wide-name" placeholder="Players, Teams, Competition ..." name="search_text"></div>
                 <div class="col-md-4"><%= select_tag "season", options_from_collection_for_select(@seasons , "id", "season"), :class=>"form-control" %></div>
-                <div class="col-md-2"><input type="hidden" id="page_kind" /></div>
+                <div class="col-md-2"><%= hidden_field_tag "page_kind" %><%= hidden_field_tag "value_id" %></div>
               <button type="button" class="btn btn-default" id="home-search-button">Search</button>
               </div>
             <% end %>
@@ -116,7 +116,9 @@
 
 
         ]).on('typeahead:selected', function($e, datum) {
-                    $('input.search_type').val(datum.page_type);
+                    //alert(datum.page_type);
+                    $('input#page_kind').val(datum.page_type);
+                    $('input#value_id').val(datum.value_id);
                 });
         $('#home-search-button').click( function() {
             $('#home-search-form').submit();
