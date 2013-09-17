@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Searching for players, teams, match, statistics and much more in the rugby world - Roogby</title>
+  <!--<link rel="Shortcut Icon" href="/favicon.ico" type="image/x-icon" />-->
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag "application" %>
+  <meta name="revisit-after" content="7 days" />
+  <meta http-equiv="expires" content="0" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <meta http-equiv="pragma" content="no-cache" />
+  <meta name="robots" content="noodp, noydir" />
+  <meta name="description" content="" />
+  <meta http-equiv="Content-Language" content="en"/>
+
+  <%= csrf_meta_tag %>
+  <% unless @opengraph.blank? %>
+      <meta property="og:title" content="<%= @opengraph['title'] rescue '' %>" />
+      <meta property="og:type" content="<%= @opengraph['type'] rescue '' %>" />
+      <meta property="og:image" content="<%= @opengraph['image'] rescue '' %>" />
+      <meta property="og:url" content="<%= @opengraph['url'] rescue '' %>" />
+      <meta property="og:site_name" content="Roogby" />
+
+  <% end %>
+
+</head>
+<body>
+    <%= yield %>
+</body>
+</html>
