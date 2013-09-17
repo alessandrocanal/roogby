@@ -7,9 +7,9 @@ class CreateMatches < ActiveRecord::Migration
       t.integer :home_team_result
       t.references :away_team
       t.integer :away_team_result
-      t.references :referee_id
-      t.references :season_id
-      t.references :competition_id
+      t.references :referee
+      t.references :season
+      t.references :competition
       t.integer :round
       t.integer :round_type_id
       t.integer :stage

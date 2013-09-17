@@ -115,5 +115,51 @@ namespace :first_import do
     end
   end
 
+  desc "MATCHES IMPORT"
+  task :matches => :environment do
+    require 'nokogiri'
+    require 'open-uri'
+
+    docs = Array.new
+    docs[0] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU1'
+    docs[1] = 'http://playground.opta.net/competition.php?competition=214&season_id=2013&feed_type=RU1'
+    docs[2] = 'http://playground.opta.net/competition.php?competition=3&season_id=2013&feed_type=RU1'
+    docs[3] = 'http://playground.opta.net/competition.php?competition=215&season_id=2011&feed_type=RU1'
+    docs[4] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU1'
+
+    docs.each do |d|
+      doc = Nokogiri::XML(open(d))
+
+      fixtures = doc.xpath("fixtures/fixture")
+      fixtures.each do |f|
+        new_match = Hash.new
+        new_match[:id] = f.xpath("@id").text
+        new_match[:match_date] = Date.parse(f.xpath("@game_date").text)
+        new_match[:match_time] = f.xpath("@time").text
+        new_match[:season_id] = f.xpath("@season_id").text
+        new_match[:competition_id] = f.xpath("@comp_id").text
+        new_match[:round] = f.xpath("@round").text
+        new_match[:round_type_id] = f.xpath("@round_type_id").text
+        new_match[:stage] = f.xpath("@stage").text
+
+        teams = f.xpath("team")
+        teams.each do |t|
+          if t.xpath("@home_or_away").text == "home"
+            new_match[:home_team_id] = t.xpath("@team_id").text
+            new_match[:home_team_result] = f.xpath("@score").text
+          elsif t.xpath("@home_or_away").text == "away"
+            new_match[:away_team_id] = t.xpath("@team_id").text
+            new_match[:away_team_result] = f.xpath("@score").text
+          end
+        end
+
+        m = Match.new(new_match)
+        if m.valid?
+          m.save
+        end
+      end
+    end
+  end
+
 
 end
