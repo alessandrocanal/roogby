@@ -146,10 +146,10 @@ namespace :first_import do
         teams.each do |t|
           if t.xpath("@home_or_away").text == "home"
             new_match[:home_team_id] = t.xpath("@team_id").text
-            new_match[:home_team_result] = f.xpath("@score").text
+            new_match[:home_team_result] = t.xpath("@score").text
           elsif t.xpath("@home_or_away").text == "away"
             new_match[:away_team_id] = t.xpath("@team_id").text
-            new_match[:away_team_result] = f.xpath("@score").text
+            new_match[:away_team_result] = t.xpath("@score").text
           end
         end
 
@@ -161,5 +161,57 @@ namespace :first_import do
     end
   end
 
+  desc "ADDITIONAL PLAYERS INFO IMPORT"
+  task :additional_players_info => :environment do
+    require 'nokogiri'
+    require 'open-uri'
+
+    docs = Array.new
+
+    docs[0] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU10'
+    docs[1] = 'http://playground.opta.net/competition.php?competition=214&season_id=2013&feed_type=RU10'
+    docs[2] = 'http://playground.opta.net/competition.php?competition=3&season_id=2013&feed_type=RU10'
+    docs[3] = 'http://playground.opta.net/competition.php?competition=215&season_id=2011&feed_type=RU10'
+    docs[4] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU10'
+
+    docs.each do |d|
+      doc = Nokogiri::XML(open(d))
+      teams = doc.xpath("RU10_Profile/team")
+
+      teams.each do |t|
+        team_id = t.xpath("@id").text
+        Rails.logger.debug("TEAM ID ---->#{team_id}")
+        players = t.xpath("players")
+        players.each do |p|
+          if !p.xpath("@player_id").text.blank?
+            new_player = Hash.new
+            new_player[:id] = p.xpath("@player_id").text
+            new_player[:name] = p.xpath("@player_known_name").text
+            new_player[:date_of_birth] = p.xpath("@birth_date").text
+            new_player[:weight] = p.xpath("@height").text
+            new_player[:height] = p.xpath("@weight").text
+            new_player[:first_name] = p.xpath("@player_first_name").text
+            new_player[:last_name] = p.xpath("@player_last_name").text
+            new_player[:profile] = p.xpath("@profile").text
+            new_player[:position] = p.xpath("@position").text
+            new_player[:comments] = p.xpath("@comments").text
+            new_player[:team_id] = team_id
+            player = Player.where("id=?",p.xpath("@player_id").text)
+            if player.blank?
+              p = Player.new(new_player)
+              if p.valid?
+                p.save
+              end
+            else
+              Rails.logger.debug("PLAYER FOUND------->#{player.to_yaml}")
+              player.first.update_attributes(new_player)
+            end
+
+          end
+
+        end
+      end
+    end
+  end
 
 end

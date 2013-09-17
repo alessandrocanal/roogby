@@ -28,6 +28,11 @@
   height: 600px;
   background-color: #777;
 }
+
+.carousel-inner {
+  overflow: visible;
+}
+
 .carousel-inner > .item > img {
   position: absolute;
   top: 0;

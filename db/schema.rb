@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130913173510) do
+ActiveRecord::Schema.define(:version => 20130917103845) do
 
   create_table "competitions", :force => true do |t|
     t.string   "name"
@@ -22,22 +22,22 @@ ActiveRecord::Schema.define(:version => 20130913173510) do
   end
 
   create_table "competitions_players_metrics", :force => true do |t|
-    t.integer  "competition_id_id"
-    t.integer  "player_id_id"
-    t.integer  "metric_id_id"
+    t.integer  "competition_id"
+    t.integer  "player_id"
+    t.integer  "metric_id"
     t.integer  "quantity"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "competitions_teams_metrics", :force => true do |t|
-    t.integer  "competition_id_id"
-    t.integer  "team_id_id"
-    t.integer  "metric_id_id"
+    t.integer  "competition_id"
+    t.integer  "team_id"
+    t.integer  "metric_id"
     t.integer  "quantity"
     t.integer  "rank"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "matches", :force => true do |t|
@@ -47,35 +47,35 @@ ActiveRecord::Schema.define(:version => 20130913173510) do
     t.integer  "home_team_result"
     t.integer  "away_team_id"
     t.integer  "away_team_result"
-    t.integer  "referee_id_id"
-    t.integer  "season_id_id"
-    t.integer  "competition_id_id"
+    t.integer  "referee_id"
+    t.integer  "season_id"
+    t.integer  "competition_id"
     t.integer  "round"
     t.integer  "round_type_id"
     t.integer  "stage"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "matches_events", :force => true do |t|
-    t.integer  "match_id_id"
-    t.integer  "player_id_id"
+    t.integer  "match_id"
+    t.integer  "player_id"
     t.integer  "minute"
     t.integer  "second"
     t.string   "event_type"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "matches_players_statistics", :force => true do |t|
-    t.integer  "match_id_id"
-    t.integer  "player_id_id"
-    t.integer  "team_id_id"
-    t.integer  "position_id_id"
-    t.integer  "statistic_id_id"
+    t.integer  "match_id"
+    t.integer  "player_id"
+    t.integer  "team_id"
+    t.integer  "position_id"
+    t.integer  "statistic_id"
     t.integer  "quantity"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "metrics", :force => true do |t|
@@ -95,6 +95,9 @@ ActiveRecord::Schema.define(:version => 20130913173510) do
     t.string   "last_name"
     t.integer  "team_id"
     t.string   "headshot"
+    t.text     "profile"
+    t.string   "position"
+    t.text     "comments"
   end
 
   create_table "positions", :force => true do |t|

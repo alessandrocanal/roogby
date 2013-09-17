@@ -3,6 +3,8 @@ class Competition < ActiveRecord::Base
 
   validates :id, :uniqueness => true
 
+  has_many :matches
+
   def typeheadsearch_competition
     Rails.cache.fetch("typeaheadsearch_competition", :expires_in => 1.day) do
       competitions = Competition.order("name ASC")

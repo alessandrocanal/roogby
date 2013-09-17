@@ -1,8 +1,8 @@
 class CreateMatchesEvents < ActiveRecord::Migration
   def change
     create_table :matches_events do |t|
-      t.references :match_id
-      t.references :player_id
+      t.references :match
+      t.references :player
       t.integer :minute
       t.integer :second
       t.string :event_type

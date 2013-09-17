@@ -1,11 +1,11 @@
 class CreateMatchesPlayersStatistics < ActiveRecord::Migration
   def change
     create_table :matches_players_statistics do |t|
-      t.references :match_id
-      t.references :player_id
-      t.references :team_id
-      t.references :position_id
-      t.references :statistic_id
+      t.references :match
+      t.references :player
+      t.references :team
+      t.references :position
+      t.references :statistic
       t.integer :quantity
       t.timestamps
     end
