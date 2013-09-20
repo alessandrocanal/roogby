@@ -19,6 +19,12 @@
     </div>
   </div>
   <div class="col-md-4"><h1>Last stats</h1></div>
-  <div class="col-md-4"><h1>Last matches played</h1></div>
+  <div class="col-md-4"><h1>Last matches played</h1>
+    <ul>
+      <% @matches.each do |m| %>
+        <li><%= link_to m.home_team.name+" - "+m.away_team.name, m %></li>
+      <% end %>
+    </ul>
+  </div>
 </div>
 

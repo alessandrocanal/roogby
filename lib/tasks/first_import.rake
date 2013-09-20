@@ -214,4 +214,223 @@ namespace :first_import do
     end
   end
 
+  desc "MATCH EVENTS IMPORT"
+  task :matches_events => :environment do
+    require 'nokogiri'
+    require 'open-uri'
+
+    docs = Array.new
+
+    docs[0] = 'http://playground.opta.net/?game_id=11559&feed_type=ru7'
+    docs[1] = 'http://playground.opta.net/?game_id=2478&feed_type=ru7'
+    docs[2] = 'http://playground.opta.net/?game_id=2479&feed_type=ru7'
+    docs[3] = 'http://playground.opta.net/?game_id=2480&feed_type=ru7'
+    docs[4] = 'http://playground.opta.net/?game_id=2481&feed_type=ru7'
+    docs[5] = 'http://playground.opta.net/?game_id=2482&feed_type=ru7'
+    docs[6] = 'http://playground.opta.net/?game_id=2483&feed_type=ru7'
+    docs[7] = 'http://playground.opta.net/?game_id=2484&feed_type=ru7'
+    docs[8] = 'http://playground.opta.net/?game_id=2485&feed_type=ru7'
+    docs[9] = 'http://playground.opta.net/?game_id=2486&feed_type=ru7'
+    docs[10] = 'http://playground.opta.net/?game_id=2487&feed_type=ru7'
+    docs[11] = 'http://playground.opta.net/?game_id=2488&feed_type=ru7'
+    docs[12] = 'http://playground.opta.net/?game_id=2489&feed_type=ru7'
+    docs[13] = 'http://playground.opta.net/?game_id=8779&feed_type=ru7'
+    docs[14] = 'http://playground.opta.net/?game_id=8786&feed_type=ru7'
+    docs[15] = 'http://playground.opta.net/?game_id=8791&feed_type=ru7'
+    docs[16] = 'http://playground.opta.net/?game_id=8797&feed_type=ru7'
+    docs[17] = 'http://playground.opta.net/?game_id=8799&feed_type=ru7'
+    docs[18] = 'http://playground.opta.net/?game_id=5986&feed_type=ru7'
+    docs[19] = 'http://playground.opta.net/?game_id=5981&feed_type=ru7'
+    docs[20] = 'http://playground.opta.net/?game_id=5982&feed_type=ru7'
+    docs[21] = 'http://playground.opta.net/?game_id=1627&feed_type=ru7'
+    docs[22] = 'http://playground.opta.net/?game_id=11560&feed_type=ru7'
+    docs[23] = 'http://playground.opta.net/?game_id=11561&feed_type=ru7'
+
+    docs.each do |d|
+      doc = Nokogiri::XML(open(d))
+
+      match = doc.xpath("RRML")
+      match_id = match.xpath("@id").text
+
+      events = doc.xpath("RRML/Events/Event")
+      events.each do |e|
+        match_event = Hash.new
+        match_event[:match_id] = match_id
+        match_event[:player_id] = e.xpath("@player_id").text
+        match_event[:minute] = e.xpath("@minute").text
+        match_event[:second] = e.xpath("@second").text
+        match_event[:team_id] = e.xpath("@team_id").text
+        match_event[:event_type] = e.xpath("@type").text
+
+        me = MatchesEvent.new(match_event)
+
+        if me.valid?
+          me.save
+        end
+      end
+    end
+  end
+
+  desc "COMPETIIONS PLAYERS METRICS IMPORT"
+  task :competitions_players_metrics => :environment do
+    require 'nokogiri'
+    require 'open-uri'
+
+    metrics = Metric.all
+
+    docs = Array.new
+    docs[0] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU3'
+    docs[1] = 'http://playground.opta.net/competition.php?competition=214&season_id=2013&feed_type=RU3'
+    docs[2] = 'http://playground.opta.net/competition.php?competition=3&season_id=2013&feed_type=RU3'
+    docs[3] = 'http://playground.opta.net/competition.php?competition=215&season_id=2011&feed_type=RU3'
+    docs[4] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU3'
+
+    docs.each do |d|
+      doc = Nokogiri::XML(open(d))
+
+      competition = doc.xpath("seasonrankings/competition")
+      competition_id = competition.xpath("@id").text
+      season_id = competition.xpath("@season_id").text
+
+      metrics.each do |m|
+        Rails.logger.debug("METRICA------->#{m.metric}")
+        stats = doc.xpath("seasonrankings/rankings/playerstats/"+m.metric.to_s+"/player")
+        stats.each do |s|
+          cpmetric = Hash.new
+          cpmetric[:competition_id] = competition_id
+          cpmetric[:season_id] = season_id
+          cpmetric[:player_id] = s.xpath("@player_id").text
+          cpmetric[:metric_id] = m.id.to_i
+          cpmetric[:quantity] = s.xpath("@value").text
+          cpmetric[:rank] = s.xpath("@rank").text
+
+          cpm = CompetitionsPlayersMetric.new(cpmetric)
+
+          if cpm.valid?
+            cpm.save
+          end
+        end
+      end
+    end
+
+  end
+
+  desc "COMPETIIONS TEAMS METRICS IMPORT"
+  task :competitions_teams_metrics => :environment do
+    require 'nokogiri'
+    require 'open-uri'
+
+    metrics = Metric.all
+
+    docs = Array.new
+    docs[0] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU3'
+    docs[1] = 'http://playground.opta.net/competition.php?competition=214&season_id=2013&feed_type=RU3'
+    docs[2] = 'http://playground.opta.net/competition.php?competition=3&season_id=2013&feed_type=RU3'
+    docs[3] = 'http://playground.opta.net/competition.php?competition=215&season_id=2011&feed_type=RU3'
+    docs[4] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU3'
+
+    docs.each do |d|
+      doc = Nokogiri::XML(open(d))
+
+      competition = doc.xpath("seasonrankings/competition")
+      competition_id = competition.xpath("@id").text
+      season_id = competition.xpath("@season_id").text
+
+      metrics.each do |m|
+        #Rails.logger.debug("METRICA------->#{m.metric}")
+        stats = doc.xpath("seasonrankings/rankings/teamstats/"+m.metric.to_s+"/team")
+        stats.each do |s|
+          ctmetric = Hash.new
+          ctmetric[:competition_id] = competition_id
+          ctmetric[:season_id] = season_id
+          ctmetric[:team_id] = s.xpath("@team_id").text
+          ctmetric[:metric_id] = m.id.to_i
+          ctmetric[:quantity] = s.xpath("@value").text
+          ctmetric[:rank] = s.xpath("@rank").text
+
+          ctm = CompetitionsTeamsMetric.new(ctmetric)
+
+          if ctm.valid?
+            ctm.save
+          end
+        end
+      end
+    end
+
+  end
+
+  desc "MATCH PLAYERS STATISTICS IMPORT"
+  task :matches_players_statistics => :environment do
+    require 'nokogiri'
+    require 'open-uri'
+
+    docs = Array.new
+
+    docs[0] = 'http://playground.opta.net/?game_id=11559&feed_type=ru7'
+    docs[1] = 'http://playground.opta.net/?game_id=2478&feed_type=ru7'
+    docs[2] = 'http://playground.opta.net/?game_id=2479&feed_type=ru7'
+    docs[3] = 'http://playground.opta.net/?game_id=2480&feed_type=ru7'
+    docs[4] = 'http://playground.opta.net/?game_id=2481&feed_type=ru7'
+    docs[5] = 'http://playground.opta.net/?game_id=2482&feed_type=ru7'
+    docs[6] = 'http://playground.opta.net/?game_id=2483&feed_type=ru7'
+    docs[7] = 'http://playground.opta.net/?game_id=2484&feed_type=ru7'
+    docs[8] = 'http://playground.opta.net/?game_id=2485&feed_type=ru7'
+    docs[9] = 'http://playground.opta.net/?game_id=2486&feed_type=ru7'
+    docs[10] = 'http://playground.opta.net/?game_id=2487&feed_type=ru7'
+    docs[11] = 'http://playground.opta.net/?game_id=2488&feed_type=ru7'
+    docs[12] = 'http://playground.opta.net/?game_id=2489&feed_type=ru7'
+    docs[13] = 'http://playground.opta.net/?game_id=8779&feed_type=ru7'
+    docs[14] = 'http://playground.opta.net/?game_id=8786&feed_type=ru7'
+    docs[15] = 'http://playground.opta.net/?game_id=8791&feed_type=ru7'
+    docs[16] = 'http://playground.opta.net/?game_id=8797&feed_type=ru7'
+    docs[17] = 'http://playground.opta.net/?game_id=8799&feed_type=ru7'
+    docs[18] = 'http://playground.opta.net/?game_id=5986&feed_type=ru7'
+    docs[19] = 'http://playground.opta.net/?game_id=5981&feed_type=ru7'
+    docs[20] = 'http://playground.opta.net/?game_id=5982&feed_type=ru7'
+    docs[21] = 'http://playground.opta.net/?game_id=1627&feed_type=ru7'
+    docs[22] = 'http://playground.opta.net/?game_id=11560&feed_type=ru7'
+    docs[23] = 'http://playground.opta.net/?game_id=11561&feed_type=ru7'
+
+    docs.each do |d|
+      doc = Nokogiri::XML(open(d))
+
+      match = doc.xpath("RRML")
+      match_id = match.xpath("@id").text
+
+      teams = doc.xpath("RRML/TeamDetail/Team")
+
+      teams.each do |t|
+        team_id = t.xpath("@team_id").text
+        players = t.xpath("Player")
+        players.each do |p|
+          player_id = p.xpath("@id").text
+          position_id = p.xpath("@position_id").text
+          stats = p.xpath("PlayerStats/PlayerStat")
+          stats.each do |s|
+            #Rails.logger.debug("--------->#{s.keys.first}")
+            new_statistic = Hash.new
+            statistic = Statistic.where("statistic=?", s.keys.first.to_s)
+            if !statistic.blank?
+              new_statistic[:match_id] = match_id
+              new_statistic[:team_id] = team_id
+              new_statistic[:player_id] = player_id
+              new_statistic[:position_id] = position_id
+              new_statistic[:statistic_id] = statistic.first.id
+              new_statistic[:quantity] = s.values.first
+
+              if new_statistic[:quantity] != 0 && new_statistic[:quantity] != "0" && new_statistic[:quantity] != 0.0 && new_statistic[:quantity] != "0.0" && new_statistic[:quantity] != ""
+              mps = MatchesPlayersStatistic.new(new_statistic)
+                if mps.valid?
+                  mps.save
+                end
+              end
+            end
+          end
+        end
+      end
+
+    end
+
+  end
+
 end

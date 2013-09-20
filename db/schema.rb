@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130917103845) do
+ActiveRecord::Schema.define(:version => 20130919155944) do
 
   create_table "competitions", :force => true do |t|
     t.string   "name"
@@ -28,6 +28,8 @@ ActiveRecord::Schema.define(:version => 20130917103845) do
     t.integer  "quantity"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.integer  "rank"
+    t.integer  "season_id"
   end
 
   create_table "competitions_teams_metrics", :force => true do |t|
@@ -38,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20130917103845) do
     t.integer  "rank"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.integer  "season_id"
   end
 
   create_table "matches", :force => true do |t|
@@ -65,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20130917103845) do
     t.string   "event_type"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "team_id"
   end
 
   create_table "matches_players_statistics", :force => true do |t|
@@ -73,9 +77,9 @@ ActiveRecord::Schema.define(:version => 20130917103845) do
     t.integer  "team_id"
     t.integer  "position_id"
     t.integer  "statistic_id"
-    t.integer  "quantity"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.decimal  "quantity",     :precision => 8, :scale => 6
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
   end
 
   create_table "metrics", :force => true do |t|

@@ -2,6 +2,7 @@ class Team < ActiveRecord::Base
   attr_accessible :name, :id
   has_and_belongs_to_many :venues
   has_many :players
+  has_many :matches
 
   validates :id, :uniqueness => true
 

@@ -1,3 +1,3 @@
 class Statistic < ActiveRecord::Base
-  # attr_accessible :title, :body
+  attr_accessible :statistic
 end

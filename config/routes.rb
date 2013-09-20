@@ -8,8 +8,7 @@ Roogby::Application.routes.draw do
   end
 
   resources :players
-
-
+  resources :matches
 
   namespace :api do
     match 'players_search' => 'players#websearch', :via=>:get

@@ -3,12 +3,14 @@ class Match < ActiveRecord::Base
 
   validates :id, :uniqueness => true
 
-  belongs_to :home_team, :class_name=>"Team"
-  belongs_to :away_team, :class_name=>"Team"
+  belongs_to :home_team, :class_name=>"Team", :foreign_key => :home_team_id
+  belongs_to :away_team, :class_name=>"Team", :foreign_key => :away_team_id
 
   belongs_to :venue
   belongs_to :season
   belongs_to :competition
   belongs_to :referee
+
+  has_many :matches_players_statistics
 
 end
