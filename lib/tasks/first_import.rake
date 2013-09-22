@@ -141,6 +141,7 @@ namespace :first_import do
         new_match[:round] = f.xpath("@round").text
         new_match[:round_type_id] = f.xpath("@round_type_id").text
         new_match[:stage] = f.xpath("@stage").text
+        new_match[:venue_id] = f.xpath("@venue_id").text
 
         teams = f.xpath("team")
         teams.each do |t|

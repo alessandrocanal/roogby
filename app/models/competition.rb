@@ -4,6 +4,8 @@ class Competition < ActiveRecord::Base
   validates :id, :uniqueness => true
 
   has_many :matches
+  has_many :competitions_players_metrics
+  has_many :competitions_teams_metrics
 
   def typeheadsearch_competition
     Rails.cache.fetch("typeaheadsearch_competition", :expires_in => 1.day) do

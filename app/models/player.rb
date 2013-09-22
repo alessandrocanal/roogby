@@ -3,6 +3,9 @@ class Player < ActiveRecord::Base
 
   belongs_to :team
 
+  has_many :matches_events
+  has_many :competitions_players_metrics
+
   validates :id, :uniqueness => true
 
   def typeheadsearch_player

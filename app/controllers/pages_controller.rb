@@ -9,6 +9,19 @@ class PagesController < ApplicationController
     @opengraph['url'] = root_url
 
     @seasons = Season.order("id DESC")
+
+    @ctm = CompetitionsTeamsMetric.includes(:metric).order("RAND()").first
+    m_id = @ctm.metric_id
+    ctm_obj = CompetitionsTeamsMetric.new
+    @teams_stats = ctm_obj.last_teams_stats(m_id,5)
+
+    @cpm = CompetitionsPlayersMetric.includes(:metric).order("RAND()").first
+    metric_id = @cpm.metric_id
+    cpm_obj = CompetitionsPlayersMetric.new
+    @players_stats = cpm_obj.last_players_stats(metric_id,5)
+
+    m = Match.new
+    @last_matches = m.last_matches(5)
     render :layout => 'home'
   end
 

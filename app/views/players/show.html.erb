@@ -1,3 +1,4 @@
+<%= render :partial => "/shared/menu" %>
 <div class="row">
   <div class="col-md-4"><h1><%= @player.name%></h1>
     <div class="row">
@@ -18,13 +19,14 @@
       </div>
     </div>
   </div>
-  <div class="col-md-4"><h1>Last stats</h1></div>
+
   <div class="col-md-4"><h1>Last matches played</h1>
-    <ul>
+    <ul class="list-unstyled">
       <% @matches.each do |m| %>
-        <li><%= link_to m.home_team.name+" - "+m.away_team.name, m %></li>
+        <li><em><%= m.match_date.strftime("%d/%m/%Y") %></em>&nbsp;<%= link_to m.home_team.name+" "+m.home_team_result.to_s+" - "+m.away_team_result.to_s+" "+m.away_team.name, m %>&nbsp;(<%=m.competition.long_name %>)</li>
       <% end %>
     </ul>
   </div>
+  <div class="col-md-4"><h1>Last stats</h1></div>
 </div>
 

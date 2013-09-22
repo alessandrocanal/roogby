@@ -1,0 +1,87 @@
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7guz_PABGX8h4bEMCcJLP7HPqtFYFEW4&sensor=true"></script>
+<script type="text/javascript">
+    function initialize() {
+        var center = new google.maps.LatLng(<%=@match.venue.latitude%>, <%=@match.venue.longitude%>);
+        var mapOptions = {
+            center: center,
+            zoom: 12,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map-canvas"),
+                mapOptions);
+
+        var marker = new google.maps.Marker({ position: center,
+            map: map,
+            title: 'Questo è un testo di suggerimento',
+            icon: '/assets/stadium.png'
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<%= render :partial => "/shared/menu" %>
+<div class="row">
+  <div class="col-md-4">
+    <h2><%= @match.home_team.name+" "+@match.home_team_result.to_s+" - "+@match.away_team_result.to_s+" "+@match.away_team.name%></h2>
+    <p><strong>Date:</strong><span style="padding-left:5px"><%= @match.match_date.strftime('%d/%m/%Y')%></span></p>
+    <p><strong>Kick off:</strong><span style="padding-left:5px"><%= @match.match_time.strftime('%H:%M') %></span></p>
+
+    <p><strong>Venue:</strong><span style="padding-left:5px"><%= @match.venue.name rescue 'NA' %>&nbsp;(<%=@match.venue.city rescue 'NA'%>)</span></p>
+    <div id="map-canvas" style="width: 100%; height: 300px"></div>
+
+
+  </div>
+  <div class="col-md-4">
+    <h2>Teams</h2>
+    <table class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th align="center"><%= @match.home_team.name %></th>
+          <th></th>
+          <th align="center"><%= @match.away_team.name %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @home_team_lineup.each_with_index do |l,i| %>
+            <tr>
+              <td align="center"><%= link_to l[:name], player_path(:id=>l[:player_id]) %></td>
+              <td><%= l[:position_id] %></td>
+              <td align="center"><%= link_to @away_team_lineup[i][:name], player_path(:id=>@away_team_lineup[i][:player_id]) %></td>
+            </tr>
+        <% end %>
+      </tbody>
+
+    </table>
+
+  </div>
+  <div class="col-md-4">
+    <h2>Events</h2>
+    <table class="table table-hover table-condensed table-bordered">
+      <thead>
+        <tr>
+          <th><%= @match.home_team.name %></th>
+          <th></th>
+          <th><%= @match.away_team.name %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @match_events.each do |me| %>
+            <tr>
+                <% if me.team_id == @match.home_team.id %>
+                    <td><strong><%=me.event_type%></strong>:&nbsp;<%=me.player.name rescue nil %></td>
+                    <td><%=me.minute %>:<%=me.second %></td>
+                    <td></td>
+                <% else %>
+                    <td></td>
+                    <td><%=me.minute %>:<%=me.second %></td>
+                    <td><strong><%=me.event_type%></strong>:&nbsp;<%=me.player.name rescue nil %></td>
+                <% end %>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
