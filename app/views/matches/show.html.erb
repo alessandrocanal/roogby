@@ -1,7 +1,7 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7guz_PABGX8h4bEMCcJLP7HPqtFYFEW4&sensor=true"></script>
 <script type="text/javascript">
     function initialize() {
-        var center = new google.maps.LatLng(<%=@match.venue.latitude%>, <%=@match.venue.longitude%>);
+        var center = new google.maps.LatLng(<%=@lat%>, <%=@lon%>);
         var mapOptions = {
             center: center,
             zoom: 12,

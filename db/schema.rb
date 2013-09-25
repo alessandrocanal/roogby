@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130922070331) do
+ActiveRecord::Schema.define(:version => 20130925132032) do
 
   create_table "competitions", :force => true do |t|
     t.string   "name"
@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(:version => 20130922070331) do
     t.integer  "team_id"
     t.integer  "position_id"
     t.integer  "statistic_id"
-    t.decimal  "quantity",     :precision => 8, :scale => 6
+    t.decimal  "quantity",     :precision => 8, :scale => 4
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
   end
@@ -112,9 +112,9 @@ ActiveRecord::Schema.define(:version => 20130922070331) do
   end
 
   create_table "rankings", :force => true do |t|
-    t.integer  "team_id"
-    t.integer  "season_id"
-    t.integer  "competition_id"
+    t.integer  "team_id_id"
+    t.integer  "season_id_id"
+    t.integer  "competition_id_id"
     t.integer  "round"
     t.integer  "rank"
     t.integer  "points"
@@ -130,8 +130,8 @@ ActiveRecord::Schema.define(:version => 20130922070331) do
     t.integer  "triesbonus"
     t.integer  "triesfor"
     t.integer  "won"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
   create_table "referees", :force => true do |t|
@@ -148,8 +148,12 @@ ActiveRecord::Schema.define(:version => 20130922070331) do
 
   create_table "statistics", :force => true do |t|
     t.string   "statistic"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.boolean  "main"
+    t.string   "category"
+    t.boolean  "percentage", :default => false
+    t.integer  "kind",       :default => 1
   end
 
   create_table "teams", :force => true do |t|

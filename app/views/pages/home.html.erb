@@ -46,7 +46,7 @@
             <%= form_tag traffic_redirection_pages_path, :method => :post, :class => '', :id => 'home-search-form' do %>
               <div class="row">
                 <div class="col-md-6"><input type="text" class="form-control typeahead roogby-finder" id="form-wide-name" placeholder="Players, Teams, Competition ..." name="search_text"></div>
-                <div class="col-md-4"><%= select_tag "season", options_from_collection_for_select(@seasons , "id", "season"), :class=>"form-control" %></div>
+                <div class="col-md-4"><%= select_tag "season", content_tag(:option,'Select season...',:value=>"")+options_from_collection_for_select(@seasons , "id", "season"), :class=>"form-control" %></div>
                 <div class="col-md-2"><%= hidden_field_tag "page_kind" %><%= hidden_field_tag "value_id" %></div>
               <button type="button" class="btn btn-default" id="home-search-button">Search</button>
               </div>
@@ -62,7 +62,11 @@
       <h4><%=@ctm.metric.metric %></h4>
       <ul class="list-group">
         <% @teams_stats.each do |ts| %>
-            <li class="list-group-item"><span class="badge"><%=ts.quantity %></span><%= link_to ts.team.name, team_path(:id=>ts.team_id) %>&nbsp;- <%=ts.competition.name+" "+ts.season_id.to_s %></li>
+            <% if !ts.team.blank? %>
+                <li class="list-group-item"><span class="badge"><%=ts.quantity %></span><%= link_to ts.team.name, team_path(:id=>ts.team_id) %>&nbsp;- <%=ts.competition.name+" "+ts.season_id.to_s %></li>
+            <% else %>
+                <li class="list-group-item">Team unavailable (id=<%=ts.team_id %>) </li>
+            <% end %>
         <% end %>
       </ul>
     </div>
@@ -71,7 +75,11 @@
       <h4><%=@cpm.metric.metric %></h4>
       <ul class="list-group">
         <% @players_stats.each do |ps| %>
-            <li class="list-group-item"><span class="badge"><%=ps.quantity %></span><%= link_to ps.player.name, player_path(:id=>ps.player_id) %>&nbsp;- <%=ps.competition.name+" "+ps.season_id.to_s %></li>
+            <% if !ps.player.blank? %>
+                <li class="list-group-item"><span class="badge"><%=ps.quantity %></span><%= link_to ps.player.name, player_path(:id=>ps.player_id) %>&nbsp;- <%=ps.competition.name+" "+ps.season_id.to_s %></li>
+            <% else %>
+                <li class="list-group-item">Player unavailable (id=<%=ps.player_id%>)</li>
+            <% end %>
         <% end %>
       </ul>
     </div>
@@ -81,6 +89,7 @@
       <ul class="list-group">
           <% @last_matches.each do |lm| %>
             <li class="list-group-item"><em><%=lm.match_date.strftime("%d/%m/%Y") %></em>&nbsp;<%= link_to lm.home_team.name+" "+lm.home_team_result.to_s+" - "+lm.away_team_result.to_s+" "+lm.away_team.name, lm %>&nbsp;(<%=lm.competition.long_name %>)</li>
+
           <% end %>
       </ul>
     </div>
