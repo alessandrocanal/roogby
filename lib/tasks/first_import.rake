@@ -400,6 +400,8 @@ namespace :first_import do
 
       teams = doc.xpath("RRML/TeamDetail/Team")
 
+
+
       teams.each do |t|
         team_id = t.xpath("@team_id").text
         players = t.xpath("Player")
@@ -411,6 +413,7 @@ namespace :first_import do
             #Rails.logger.debug("--------->#{s.keys.first}")
             new_statistic = Hash.new
             statistic = Statistic.where("statistic=?", s.keys.first.to_s)
+
             if !statistic.blank?
               new_statistic[:match_id] = match_id
               new_statistic[:team_id] = team_id
@@ -420,7 +423,7 @@ namespace :first_import do
               new_statistic[:quantity] = s.values.first
 
               if new_statistic[:quantity] != 0 && new_statistic[:quantity] != "0" && new_statistic[:quantity] != 0.0 && new_statistic[:quantity] != "0.0" && new_statistic[:quantity] != ""
-              mps = MatchesPlayersStatistic.new(new_statistic)
+                mps = MatchesPlayersStatistic.new(new_statistic)
                 if mps.valid?
                   mps.save
                 end
@@ -428,6 +431,27 @@ namespace :first_import do
             end
           end
         end
+        teams_stats = t.xpath("TeamStats/TeamStat")
+        teams_stats.each do |ts|
+          new_team_statistic = Hash.new
+          statistic = Statistic.where("statistic=?", ts.keys.first.to_s)
+
+          if !statistic.blank?
+            new_team_statistic[:match_id] = match_id
+            new_team_statistic[:team_id] = team_id
+
+            new_team_statistic[:statistic_id] = statistic.first.id
+            new_team_statistic[:quantity] = ts.values.first
+
+            if new_team_statistic[:quantity] != 0 && new_team_statistic[:quantity] != "0" && new_team_statistic[:quantity] != 0.0 && new_team_statistic[:quantity] != "0.0" && new_team_statistic[:quantity] != ""
+              mts = MatchesTeamsStatistic.new(new_team_statistic)
+              if mts.valid?
+                mts.save
+              end
+            end
+          end
+        end
+
       end
 
     end
