@@ -30,4 +30,13 @@ class Match < ActiveRecord::Base
     #end
   end
 
+  def competition_matches(competition_id, season_id)
+    #Rails.cache.fetch("match_"+id.to_s, :expires_in => 1.hour) do
+      response = Match.includes(:home_team, :away_team).where("competition_id=? AND season_id=?", competition_id, season_id).order("round ASC")
+
+      #Rails.logger.debug("RESP----------->#{response}")
+      response
+    #end
+  end
+
 end

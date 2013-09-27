@@ -32,6 +32,8 @@ class PagesController < ApplicationController
         redirect_to @player
       elsif params[:page_kind] == 'teams'
       elsif params[:page_kind] == 'competitions'
+        @competition = Competition.find(params['value_id'])
+        redirect_to @competition
       end
     else
 

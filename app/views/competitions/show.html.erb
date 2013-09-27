@@ -1,0 +1,20 @@
+<%= render :partial => "/shared/menu" %>
+<div class="row">
+  <div class="col-md-4">
+    <h1 style="text-align:center;"><%= @competition.name%></h1>
+    <div class="row">
+      <ul class="list-group">
+        <% @matches.each do |m| %>
+            <li class="list-group-item"><em><%= m.match_date.strftime("%d/%m/%Y") %></em>&nbsp;<%= link_to m.home_team.name+" "+m.home_team_result.to_s+" - "+m.away_team_result.to_s+" "+m.away_team.name, m %>&nbsp;(<%=m.competition.long_name %>)</li>
+        <% end %>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="col-md-4"><h1>Players' stats</h1>
+
+  </div>
+  <div class="col-md-4"><h1>Matches' stats</h1></div>
+</div>
+
