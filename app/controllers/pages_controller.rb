@@ -26,11 +26,20 @@ class PagesController < ApplicationController
   end
 
   def traffic_redirection
+    Rails.logger.debug("PARAMS------>#{params}")
     if !params[:page_kind].blank?
+      if !params[:season].blank?
+        session[:season_id] = params[:season]
+      else
+        session[:season_id] = ""
+      end
       if params[:page_kind] == 'players'
         @player = Player.find(params['value_id'])
         redirect_to @player
       elsif params[:page_kind] == 'teams'
+        @team = Team.find(params['value_id'])
+        redirect_to @team
+
       elsif params[:page_kind] == 'competitions'
         @competition = Competition.find(params['value_id'])
         redirect_to @competition

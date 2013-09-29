@@ -316,6 +316,118 @@ namespace :first_import do
 
   end
 
+  desc "COMPETIIONS PLAYERS SEASONS METRICS IMPORT"
+  task :competitions_players_seasons_metrics => :environment do
+    require 'nokogiri'
+    require 'open-uri'
+
+    docs = Array.new
+    docs[0] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU4'
+    docs[1] = 'http://playground.opta.net/competition.php?competition=214&season_id=2013&feed_type=RU4'
+    docs[2] = 'http://playground.opta.net/competition.php?competition=3&season_id=2013&feed_type=RU4'
+    docs[3] = 'http://playground.opta.net/competition.php?competition=215&season_id=2011&feed_type=RU4'
+    docs[4] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU4'
+
+    docs.each do |d|
+      doc = Nokogiri::XML(open(d))
+      competition = doc.xpath('seasonstats/competition')
+      competition_id = competition.xpath('@id').text
+      season_id = competition.xpath('@season_id').text
+      #Rails.logger.debug("SEASON ID----->#{season_id}")
+
+      teams = doc.xpath('seasonstats/teams/team')
+      teams.each do |t|
+        team_id = t.xpath('@team_id').text
+        Rails.logger.debug("TEAM ID----->#{team_id}")
+
+        players = t.xpath('players/player')
+        players.each do |p|
+          player_id = p.xpath('@player_id').text
+          position_id = p.xpath('@position_id').text
+          Rails.logger.debug("PLAYER ID----->#{player_id}")
+          playerstats = p.xpath('playerstats')
+          playerstats.each do |ps|
+            metrics = ps.keys
+            metrics_quantity = ps.values
+            Rails.logger.debug("METRICHE------>#{metrics}")
+            metrics.each_with_index do |m,i|
+              metric_obj = Metric.where("metric=?", m)
+              if !metric_obj.blank?
+                metric_id = metric_obj.first.id
+
+                new_cpsm = Hash.new
+                new_cpsm[:competition_id] = competition_id
+                new_cpsm[:player_id] = player_id
+                new_cpsm[:position_id] = position_id
+                new_cpsm[:metric_id] = metric_id
+                new_cpsm[:season_id] = season_id
+                new_cpsm[:team_id] = team_id
+                new_cpsm[:quantity] = metrics_quantity[i]
+
+                cpsm = CompetitionsPlayersSeasonsMetric.new(new_cpsm)
+                if cpsm.valid?
+                  cpsm.save
+                end
+              end
+            end
+          end
+        end
+      end
+
+    end
+  end
+
+  desc "COMPETIIONS TEAMS SEASONS METRICS IMPORT"
+  task :competitions_teams_seasons_metrics => :environment do
+    require 'nokogiri'
+    require 'open-uri'
+
+    docs = Array.new
+    docs[0] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU4'
+    docs[1] = 'http://playground.opta.net/competition.php?competition=214&season_id=2013&feed_type=RU4'
+    docs[2] = 'http://playground.opta.net/competition.php?competition=3&season_id=2013&feed_type=RU4'
+    docs[3] = 'http://playground.opta.net/competition.php?competition=215&season_id=2011&feed_type=RU4'
+    docs[4] = 'http://playground.opta.net/competition.php?competition=3&season_id=2012&feed_type=RU4'
+
+    docs.each do |d|
+      doc = Nokogiri::XML(open(d))
+      competition = doc.xpath('seasonstats/competition')
+      competition_id = competition.xpath('@id').text
+      season_id = competition.xpath('@season_id').text
+      #Rails.logger.debug("SEASON ID----->#{season_id}")
+
+      teams = doc.xpath('seasonstats/teams/team')
+      teams.each do |t|
+        team_id = t.xpath('@team_id').text
+
+        teamstats = t.xpath('teamstats')
+        teamstats.each do |ts|
+          metrics = ts.keys
+          metrics_quantity = ts.values
+          metrics.each_with_index do |m,i|
+            metric_obj = Metric.where("metric=?", m)
+            if !metric_obj.blank?
+              metric_id = metric_obj.first.id
+
+              new_ctsm = Hash.new
+              new_ctsm[:competition_id] = competition_id
+              new_ctsm[:metric_id] = metric_id
+              new_ctsm[:season_id] = season_id
+              new_ctsm[:team_id] = team_id
+              new_ctsm[:quantity] = metrics_quantity[i]
+
+              ctsm = CompetitionsTeamsSeasonsMetric.new(new_ctsm)
+              if ctsm.valid?
+                ctsm.save
+              end
+            end
+          end
+
+        end
+      end
+    end
+  end
+
   desc "COMPETIIONS TEAMS METRICS IMPORT"
   task :competitions_teams_metrics => :environment do
     require 'nokogiri'

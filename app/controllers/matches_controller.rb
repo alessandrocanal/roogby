@@ -16,14 +16,17 @@ class MatchesController < ApplicationController
 
     mts = MatchesTeamsStatistic.new
     @stats = mts.retrieve_territory_stats(params[:id])
-    res = Array.new
+    @res = Hash.new
 
     @stats.each do |s|
-      Rails.logger.debug("STATS------->#{s[:quantity]}")
-      res[s[:team_id].to_i] << s[:quantity]
+      Rails.logger.debug("STATS------->#{s.to_yaml}")
+      if @res[s[:team_id]].blank?
+        @res[s[:team_id]] = Array.new
+      end
+      @res[s[:team_id]] << (s[:quantity] * 100).to_i
     end
 
-    Rails.logger.debug("STATS------->#{res}")
+    Rails.logger.debug("STATS 2------->#{@res}")
 
     mps = MatchesPlayersStatistic.new
     @home_team_lineup = mps.match_lineup(params[:id],@match.home_team.id)

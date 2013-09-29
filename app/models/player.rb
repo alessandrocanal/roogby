@@ -5,6 +5,7 @@ class Player < ActiveRecord::Base
 
   has_many :matches_events
   has_many :competitions_players_metrics
+  has_many :competitions_players_seasons_metrics
 
   validates :id, :uniqueness => true
 

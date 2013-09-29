@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130926125748) do
+ActiveRecord::Schema.define(:version => 20130929125544) do
 
   create_table "competitions", :force => true do |t|
     t.string   "name"
@@ -32,6 +32,18 @@ ActiveRecord::Schema.define(:version => 20130926125748) do
     t.integer  "season_id"
   end
 
+  create_table "competitions_players_seasons_metrics", :force => true do |t|
+    t.integer  "competition_id"
+    t.integer  "player_id"
+    t.integer  "position_id"
+    t.integer  "metric_id"
+    t.integer  "season_id"
+    t.integer  "team_id"
+    t.integer  "quantity"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
   create_table "competitions_teams_metrics", :force => true do |t|
     t.integer  "competition_id"
     t.integer  "team_id"
@@ -41,6 +53,16 @@ ActiveRecord::Schema.define(:version => 20130926125748) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.integer  "season_id"
+  end
+
+  create_table "competitions_teams_seasons_metrics", :force => true do |t|
+    t.integer  "competition_id"
+    t.integer  "team_id"
+    t.integer  "metric_id"
+    t.integer  "season_id"
+    t.decimal  "quantity",       :precision => 8, :scale => 3
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
   end
 
   create_table "matches", :force => true do |t|
@@ -60,6 +82,9 @@ ActiveRecord::Schema.define(:version => 20130926125748) do
     t.datetime "updated_at",       :null => false
     t.integer  "venue_id"
   end
+
+  add_index "matches", ["away_team_id"], :name => "index_matches_on_away_team_id"
+  add_index "matches", ["home_team_id"], :name => "index_matches_on_home_team_id"
 
   create_table "matches_events", :force => true do |t|
     t.integer  "match_id"
@@ -94,8 +119,10 @@ ActiveRecord::Schema.define(:version => 20130926125748) do
 
   create_table "metrics", :force => true do |t|
     t.string   "metric"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.integer  "kind",       :default => 0
+    t.integer  "percentage", :default => 0
   end
 
   create_table "players", :force => true do |t|
@@ -121,9 +148,9 @@ ActiveRecord::Schema.define(:version => 20130926125748) do
   end
 
   create_table "rankings", :force => true do |t|
-    t.integer  "team_id_id"
-    t.integer  "season_id_id"
-    t.integer  "competition_id_id"
+    t.integer  "team_id"
+    t.integer  "season_id"
+    t.integer  "competition_id"
     t.integer  "round"
     t.integer  "rank"
     t.integer  "points"
@@ -139,8 +166,8 @@ ActiveRecord::Schema.define(:version => 20130926125748) do
     t.integer  "triesbonus"
     t.integer  "triesfor"
     t.integer  "won"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "referees", :force => true do |t|
@@ -159,7 +186,7 @@ ActiveRecord::Schema.define(:version => 20130926125748) do
     t.string   "statistic"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
-    t.boolean  "main"
+    t.boolean  "main",       :default => false
     t.string   "category"
     t.boolean  "percentage", :default => false
     t.integer  "kind",       :default => 1
@@ -170,6 +197,7 @@ ActiveRecord::Schema.define(:version => 20130926125748) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "jersey"
+    t.string   "color"
   end
 
   create_table "teams_venues", :id => false, :force => true do |t|
