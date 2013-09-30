@@ -56,6 +56,7 @@ class CompetitionsTeamsMetric < ActiveRecord::Base
       end
 
     end
+    Rails.logger.debug("RESP------->#{response}")
     response
     #end#
   end

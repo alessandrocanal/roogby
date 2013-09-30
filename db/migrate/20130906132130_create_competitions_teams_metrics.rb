@@ -4,7 +4,7 @@ class CreateCompetitionsTeamsMetrics < ActiveRecord::Migration
       t.references :competition
       t.references :team
       t.references :metric
-      t.integer :quantity
+      t.decimal :quantity, :precision => 8, :scale => 3
       t.integer :rank
       t.timestamps
     end

@@ -144,3 +144,83 @@ p.suggestion-header {
   font-style:italic;
   font-size: 16px;
 }
+
+footer {
+  float: left;
+  width: 100%;
+  display:block;
+
+}
+
+#footer-container {
+  background: url("/assets/footer-divider.png") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
+  float: left;
+  height: 80px;
+  margin: 60px 0 0;
+  width: 100%;
+}
+
+#footer-inner {
+  border-bottom: 4px solid #554D47;
+  height: 80px;
+  margin: 0 auto;
+  width: 960px;
+}
+
+#copyright {
+  float: left;
+  padding-top: 40px;
+}
+
+#copyright p {
+  font-family: ff-dagny-web-pro-1,ff-dagny-web-pro-2,Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+#social {
+  float: right;
+  padding-top: 28px;
+}
+
+#social ul {
+  float: right;
+  list-style: none outside none;
+  margin: 0;
+}
+
+#social ul li {
+  float: left;
+  height: 40px;
+  margin-left: 15px;
+  width: 40px;
+}
+
+#social ul li#social-twitter a {
+   background: url("/assets/icons/twitter.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+ }
+#social ul li#social-pinterest a {
+  background: url("/assets/icons/pinterest.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+#social ul li#social-flickr a {
+  background: url("/assets/icons/flickr.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+#social ul li#social-linkedin a {
+  background: url("/assets/icons/linkedin.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+#social ul li#social-blogger a {
+  background: url("/assets/icons/blogger.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+#social ul li a {
+  transition: opacity 0.1s ease 0s;
+}
+#social ul li a {
+  float: left;
+  height: 40px;
+  text-indent: -9999px;
+  width: 40px;
+}
+
+#social ul li a:hover {
+  opacity: 0.5;
+}
