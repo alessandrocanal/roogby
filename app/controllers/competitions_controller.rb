@@ -1,5 +1,10 @@
 class CompetitionsController < ApplicationController
 
+  def index
+
+    render :layout => 'competition'
+  end
+
   def show
     @competition = Competition.find(params[:id])
 

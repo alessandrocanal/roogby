@@ -1,5 +1,9 @@
 class MatchesController < ApplicationController
 
+  def index
+    render :layout => 'match'
+  end
+
   def show
 
     m = Match.new
@@ -9,9 +13,11 @@ class MatchesController < ApplicationController
     if !@match.venue.blank?
       @lat = @match.venue.latitude
       @lon = @match.venue.longitude
+      @venue = @match.venue.name+" - "+@match.venue.address+" ("+@match.venue.city+")" rescue "NA"
     else
       @lat = 0
       @lon = 0
+      @venue = ""
     end
 
     mts = MatchesTeamsStatistic.new

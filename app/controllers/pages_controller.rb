@@ -34,18 +34,22 @@ class PagesController < ApplicationController
         session[:season_id] = ""
       end
       if params[:page_kind] == 'players'
+        flash[:error] = ""
         @player = Player.find(params['value_id'])
         redirect_to @player
       elsif params[:page_kind] == 'teams'
+        flash[:error] = ""
         @team = Team.find(params['value_id'])
         redirect_to @team
 
       elsif params[:page_kind] == 'competitions'
+        flash[:error] = ""
         @competition = Competition.find(params['value_id'])
         redirect_to @competition
       end
     else
-
+      flash[:error] = "No results match"
+      redirect_to root_path
     end
   end
 end

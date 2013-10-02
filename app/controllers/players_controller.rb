@@ -1,5 +1,10 @@
 class PlayersController < ApplicationController
 
+  def index
+
+    render :layout => 'player'
+  end
+
   def show
 
     @player = Player.find(params[:id])

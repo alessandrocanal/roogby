@@ -1,5 +1,11 @@
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7guz_PABGX8h4bEMCcJLP7HPqtFYFEW4&sensor=true"></script>
 <script type="text/javascript">
+    function loadScript() {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyD7guz_PABGX8h4bEMCcJLP7HPqtFYFEW4&sensor=false&' + 'callback=initialize';
+        document.body.appendChild(script);
+    }
+
     function initialize() {
         var center = new google.maps.LatLng(<%=@lat%>, <%=@lon%>);
         var mapOptions = {
@@ -12,14 +18,20 @@
 
         var marker = new google.maps.Marker({ position: center,
             map: map,
-            title: 'Questo è un testo di suggerimento',
+            title: '<%=@venue %>',
             icon: '/assets/stadium.png'
         });
     }
-    google.maps.event.addDomListener(window, 'load', initialize);
+    //google.maps.event.addDomListener(window, 'load', initialize);
+    window.onload = loadScript;
 
 </script>
 <%= render :partial => "/shared/menu" %>
+<ol class="breadcrumb">
+  <li><a href="<%=root_path%>">Home</a></li>
+  <li class="active"><%= @match.home_team.name+" - "+@match.away_team.name%></li>
+</ol>
+
 <div class="row">
   <div class="col-md-4">
     <h3 style="text-align:center;"><span class="label label-primary"><%= @match.home_team.name+" "+@match.home_team_result.to_s+" - "+@match.away_team_result.to_s+" "+@match.away_team.name%></span></h3>

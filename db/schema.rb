@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130929125544) do
+ActiveRecord::Schema.define(:version => 20131002064623) do
 
   create_table "competitions", :force => true do |t|
     t.string   "name"
@@ -32,6 +32,10 @@ ActiveRecord::Schema.define(:version => 20130929125544) do
     t.integer  "season_id"
   end
 
+  add_index "competitions_players_metrics", ["competition_id"], :name => "index_competitions_players_metrics_on_competition_id"
+  add_index "competitions_players_metrics", ["metric_id"], :name => "index_competitions_players_metrics_on_metric_id"
+  add_index "competitions_players_metrics", ["player_id"], :name => "index_competitions_players_metrics_on_player_id"
+
   create_table "competitions_players_seasons_metrics", :force => true do |t|
     t.integer  "competition_id"
     t.integer  "player_id"
@@ -44,16 +48,24 @@ ActiveRecord::Schema.define(:version => 20130929125544) do
     t.datetime "updated_at",     :null => false
   end
 
+  add_index "competitions_players_seasons_metrics", ["competition_id"], :name => "index_competitions_players_seasons_metrics_on_competition_id"
+  add_index "competitions_players_seasons_metrics", ["metric_id"], :name => "index_competitions_players_seasons_metrics_on_metric_id"
+  add_index "competitions_players_seasons_metrics", ["player_id"], :name => "index_competitions_players_seasons_metrics_on_player_id"
+
   create_table "competitions_teams_metrics", :force => true do |t|
     t.integer  "competition_id"
     t.integer  "team_id"
     t.integer  "metric_id"
-    t.integer  "quantity"
+    t.decimal  "quantity",       :precision => 8, :scale => 3
     t.integer  "rank"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
     t.integer  "season_id"
   end
+
+  add_index "competitions_teams_metrics", ["competition_id"], :name => "index_competitions_teams_metrics_on_competition_id"
+  add_index "competitions_teams_metrics", ["metric_id"], :name => "index_competitions_teams_metrics_on_metric_id"
+  add_index "competitions_teams_metrics", ["team_id"], :name => "index_competitions_teams_metrics_on_team_id"
 
   create_table "competitions_teams_seasons_metrics", :force => true do |t|
     t.integer  "competition_id"
@@ -64,6 +76,10 @@ ActiveRecord::Schema.define(:version => 20130929125544) do
     t.datetime "created_at",                                   :null => false
     t.datetime "updated_at",                                   :null => false
   end
+
+  add_index "competitions_teams_seasons_metrics", ["competition_id"], :name => "index_competitions_teams_seasons_metrics_on_competition_id"
+  add_index "competitions_teams_seasons_metrics", ["metric_id"], :name => "index_competitions_teams_seasons_metrics_on_metric_id"
+  add_index "competitions_teams_seasons_metrics", ["team_id"], :name => "index_competitions_teams_seasons_metrics_on_team_id"
 
   create_table "matches", :force => true do |t|
     t.time     "match_time"
@@ -97,6 +113,9 @@ ActiveRecord::Schema.define(:version => 20130929125544) do
     t.integer  "team_id"
   end
 
+  add_index "matches_events", ["match_id"], :name => "index_matches_events_on_match_id"
+  add_index "matches_events", ["player_id"], :name => "index_matches_events_on_player_id"
+
   create_table "matches_players_statistics", :force => true do |t|
     t.integer  "match_id"
     t.integer  "player_id"
@@ -108,6 +127,10 @@ ActiveRecord::Schema.define(:version => 20130929125544) do
     t.datetime "updated_at",                                 :null => false
   end
 
+  add_index "matches_players_statistics", ["match_id"], :name => "index_matches_players_statistics_on_match_id"
+  add_index "matches_players_statistics", ["player_id"], :name => "index_matches_players_statistics_on_player_id"
+  add_index "matches_players_statistics", ["team_id"], :name => "index_matches_players_statistics_on_team_id"
+
   create_table "matches_teams_statistics", :force => true do |t|
     t.integer  "match_id"
     t.integer  "team_id"
@@ -116,6 +139,10 @@ ActiveRecord::Schema.define(:version => 20130929125544) do
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
   end
+
+  add_index "matches_teams_statistics", ["match_id"], :name => "index_matches_teams_statistics_on_match_id"
+  add_index "matches_teams_statistics", ["statistic_id"], :name => "index_matches_teams_statistics_on_statistic_id"
+  add_index "matches_teams_statistics", ["team_id"], :name => "index_matches_teams_statistics_on_team_id"
 
   create_table "metrics", :force => true do |t|
     t.string   "metric"

@@ -1,32 +1,17 @@
 <div class="navbar-wrapper">
     <div class="container">
         <div class="navbar navbar-inverse navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a href="#" class="navbar-brand">Roogby</a>
-                </div>
+            <div class="container container-home">
+              <div class="navbar-header">
+                <a href="#" class="navbar-brand">Roogby</a>
+              </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                        <li class="dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Dropdown <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li class="dropdown-header">Nav header</li>
-                                <li><a href="#">Separated link</a></li>
-                                <li><a href="#">One more separated link</a></li>
-                            </ul>
-                        </li>
+                      <li class="active"><a href="<%= players_path %>">Players</a></li>
+                      <li class="active"><a href="<%= teams_path %>">Teams</a></li>
+                      <li class="active"><a href="<%= competitions_path %>">Competitions</a></li>
+                      <li class="active"><a href="#">Live matches!</a></li>
+                      <li class="active"><a href="#">About</a></li>
                     </ul>
                 </div>
             </div>
@@ -36,13 +21,17 @@
 <div class="carousel slide">
   <div class="carousel-inner">
     <div class="item active">
-      <img src="/assets/scrum.jpg" style="height: 600px; width: 100%; display: block;" />
+      <img src="/assets/scrum.jpg" style="height: 400px; width: 100%; display: block;" />
     </div>
     <div class="container">
         <div class="carousel-caption">
             <h1>Roogby, googling rugby</h1>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-
+            <p class="disclaimer">The easiest and quickest way to retrieve informations about rugby's world</p>
+            <% if !flash[:error].blank? %>
+              <div class="alert alert-danger">
+                Ehy! Didn't you find what you search? Take a look at our <a href="#" class="alert-link">players' page</a> or <a href="#" class="alert-link">teams' page</a>
+              </div>
+            <% end %>
             <%= form_tag traffic_redirection_pages_path, :method => :post, :class => '', :id => 'home-search-form' do %>
               <div class="row">
                 <div class="col-md-6"><input type="text" class="form-control typeahead roogby-finder" id="form-wide-name" placeholder="Players, Teams, Competition ..." name="search_text"></div>

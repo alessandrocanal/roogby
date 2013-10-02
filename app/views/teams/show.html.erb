@@ -12,7 +12,7 @@
         <% if @matches.count == 1 %>
             <ul class="list-group">
               <% @matches[@matches.keys.first].each do |m| %>
-                  <li class="list-group-item"><em><%=m.match_date.strftime("%d/%m/%Y") %></em>&nbsp;<%= link_to m.home_team.name+" "+m.home_team_result.to_s+" - "+m.away_team_result.to_s+" "+m.away_team.name, m %>&nbsp;(<%=m.competition.long_name %>)</li>
+                  <li class="list-group-item"><small><em><%=m.match_date.strftime("%d/%m/%Y") %></em>&nbsp;<%= link_to m.home_team.name+" "+m.home_team_result.to_s+" - "+m.away_team_result.to_s+" "+m.away_team.name, m %>&nbsp;(<%=m.competition.long_name %>)</small></li>
               <% end %>
             </ul>
 
