@@ -1,20 +1,101 @@
 <%= render :partial => "/shared/menu" %>
 <div class="row">
   <div class="col-md-4">
-    <h1 style="text-align:center;"><%= @competition.name%></h1>
+    <h3 style="text-align:center;"><span class="label label-primary"><%= @competition.name%> <%=session[:season_id] rescue nil%></span></h3>
     <div class="row">
-      <ul class="list-group">
-        <% @matches.each do |m| %>
-            <li class="list-group-item"><em><%= m.match_date.strftime("%d/%m/%Y") %></em>&nbsp;<%= link_to m.home_team.name+" "+m.home_team_result.to_s+" - "+m.away_team_result.to_s+" "+m.away_team.name, m %>&nbsp;(<%=m.competition.long_name %>)</li>
-        <% end %>
-      </ul>
+      <% if @matches.count == 1 %>
+          <ul class="list-group">
+            <% @matches.each do |k,v| %>
+                <% v.each do |round,ms| %>
+                    <h5><span class="label label-default">Round <%=round %></span></h5>
+                    <ul class="list-group">
+                    <% ms.each do |m| %>
+                        <li class="list-group-item"><small><em><%= m.match_date.strftime("%d/%m/%Y") %></em> <%= link_to m.home_team.name+" "+m.home_team_result.to_s+" - "+m.away_team_result.to_s+" "+m.away_team.name, m %></small></li>
+                    <% end %>
+                    </ul>
+                <% end %>
+            <% end %>
+          </ul>
+      <% else %>
+          <div id="matches-accordion">
+            <% @matches.each do |k,v| %>
+                <h3><%= k %></h3>
+                <% v.each do |round,ms| %>
+                    <div>
+
+                        <h5><span class="label label-default">Round <%=round %></span></h5>
+                        <ul class="list-unstyled" style="padding:0px; border:0px;">
+                        <% ms.each do |m| %>
+                          <li style="padding-left:5px;"><small><em><%= m.match_date.strftime("%d/%m/%Y") %></em> <%= link_to m.home_team.name+" "+m.home_team_result.to_s+" - "+m.away_team_result.to_s+" "+m.away_team.name, m, :style=>"color: #428BCA;text-decoration: none;" %></small></li>
+                        <% end %>
+                        </ul>
+                    </div>
+                <% end %>
+            <% end %>
+          </div>
+      <% end %>
+
     </div>
 
   </div>
 
-  <div class="col-md-4"><h1>Players' stats</h1>
+  <div class="col-md-4"><h3 style="text-align:center;"><span class="label label-primary">Players' stats</span></h3>
 
   </div>
-  <div class="col-md-4"><h1>Matches' stats</h1></div>
+  <div class="col-md-4"><h3 style="text-align:center;"><span class="label label-primary">Teams' stats</span></h3>
+    <% if @stats_rank.count == 1 %>
+        <ul class="list-group" >
+          <% @stats_rank.each do |k,v| %>
+              <% v.each do |rank, comp_v| %>
+                  <a href="#">Rank <%= rank%></a>
+                  <div class="rank" style="display:block;">
+                  <% comp_v.each do |metric|  %>
+                      <% if metric["rank"] == 1 %>
+                          <li class="list-group-item"><span class="glyphicon glyphicon-star-empty"></span>&nbsp;<span class="badge"><%=metric[metric.keys.first]%></span><%=metric["team"]%> - <%= t 'metric.'+metric.keys.first.to_s%></li>
+                      <% else %>
+                          <li class="list-group-item"><span class="badge"><%=metric[metric.keys.first]%></span><%=metric["team"]%> - <%= t 'metric.'+metric.keys.first.to_s%></li>
+                      <% end %>
+                  <% end %>
+                  </div>
+              <% end %>
+          <% end %>
+        </ul>
+    <% else %>
+        <div id="stats-rank-accordion">
+          <% @stats_rank.each do |k,v| %>
+              <% v.each do |comp_k, comp_v| %>
+                  <h3><%= k.to_s+"-"+comp_k %></h3>
+                  <ul class="list-group"  style="padding:0px; border:0px;">
+                    <% comp_v.each do |metric|  %>
+                        <% if metric["rank"] == 1 %>
+                            <% if metric["percentage"] == 1 %>
+                                <li class="list-group-item"><span class="glyphicon glyphicon-star-empty"></span>&nbsp;<span class="badge"><%=(metric[metric.keys.first]*100).to_i%>%</span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank: 1)</li>
+                            <% else %>
+                                <li class="list-group-item"><span class="glyphicon glyphicon-star-empty"></span>&nbsp;<span class="badge"><%=metric[metric.keys.first].to_i%></span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank: 1)</li>
+                            <% end %>
+
+                        <% else %>
+                            <% if metric["percentage"] == 1 %>
+                                <li class="list-group-item"><span class="badge"><%=(metric[metric.keys.first]*100).to_i%>%</span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank:&nbsp;<%=metric["rank"] %>)</li>
+                            <% else %>
+                                <li class="list-group-item"><span class="badge"><%=metric[metric.keys.first].to_i%></span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank:&nbsp;<%=metric["rank"] %>)</li>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                  </ul>
+              <% end %>
+          <% end %>
+        </div>
+    <% end %>
+
+  </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#matches-accordion, #stats-rank-accordion").accordion({heightStyle: "content"});
+
+    });
+
+</script>
 

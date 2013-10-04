@@ -8,7 +8,7 @@ class PlayersController < ApplicationController
   def show
 
     @player = Player.find(params[:id])
-
+    @img_url = "#{@player.team_id}" +"/players/"+ "#{@player.headshot}"
     #@matches = Match.select("matches.*, teams.*").includes(:home_team, :away_team, :competition, :matches_players_statistics).where("matches_players_statistics.player_id=?", params[:id]).group("matches.id").order("matches.match_date DESC, matches.match_time DESC")
     #Rails.logger.debug("MATCHES----------->#{@matches.to_yaml}")
 

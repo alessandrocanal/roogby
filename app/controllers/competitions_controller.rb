@@ -9,8 +9,19 @@ class CompetitionsController < ApplicationController
     @competition = Competition.find(params[:id])
 
     m = Match.new
+    cpm = CompetitionsPlayersMetric.new
+    ctm = CompetitionsTeamsMetric.new
 
-    @matches = m.competition_matches(params[:id], 2013)
+
+    if !session[:season_id].blank?
+      @matches = m.competition_matches(params[:id], session[:season_id])
+      @stats_rank = ctm.competition_teams_stats(params[:id], session[:season_id])
+    else
+      @matches = m.competition_matches(params[:id], "all")
+      @stats_rank = ctm.competition_teams_stats(params[:id], "all")
+    end
+
+
     render :layout => 'competition'
   end
 end

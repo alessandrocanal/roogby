@@ -28,7 +28,10 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 5
+  adapter: mysql2
+  database: acanal_db1
+  pool: 50
   timeout: 5000
+  username: acanal
+  password: Iu81v7FF0
+  host: localhost

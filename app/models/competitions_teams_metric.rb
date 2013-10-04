@@ -16,7 +16,7 @@ class CompetitionsTeamsMetric < ActiveRecord::Base
   end
 
   def team_stats(team_id, season_id)
-    #Rails.cache.fetch("competition_team_stats_ranking_"+team_id.to_s+"_"+season_id.to_s, :expires_in => 7.days) do
+    #Rails.cache.fetch("competition_single_team_stats_ranking_"+team_id.to_s+"_"+season_id.to_s, :expires_in => 7.days) do
     response = Hash.new
     if season_id != "all"
       stats = CompetitionsTeamsMetric.includes(:metric, :competition).where("team_id=? AND season_id=?", team_id, season_id).order("competition_id DESC, rank ASC,metric_id ASC")
@@ -59,5 +59,50 @@ class CompetitionsTeamsMetric < ActiveRecord::Base
     Rails.logger.debug("RESP------->#{response}")
     response
     #end#
+  end
+
+  def competition_teams_stats(competition_id, season_id)
+    #Rails.cache.fetch("competition_teams_stats_ranking_"+competition_id.to_s+"_"+season_id.to_s, :expires_in => 7.days) do
+    response = Hash.new
+    if season_id != "all"
+      stats = CompetitionsTeamsMetric.includes(:metric, :team).where("competition_id=? AND season_id=?", competition_id, season_id).order("rank ASC,metric_id ASC")
+    else
+      stats = CompetitionsTeamsMetric.includes(:metric, :team).where("competition_id=?", competition_id).order("season_id DESC,rank ASC,metric_id ASC")
+    end
+    stats.each do |s|
+      if response[s.season_id].blank?
+        response[s.season_id] = Hash.new
+        rank = Hash.new
+        rank[s.rank] = Array.new
+        metric = Hash.new
+        metric[s.metric.metric] = s.quantity
+        metric["team"] = s.team.name
+        metric["rank"] = s.rank
+        metric["kind"] = s.metric.kind
+        metric["percentage"] = s.metric.percentage
+        rank[s.rank] << metric
+        response[s.season_id] = rank
+      elsif response[s.season_id][s.rank].blank?
+        response[s.season_id][s.rank] = Array.new
+        metric = Hash.new
+        metric[s.metric.metric] = s.quantity
+        metric["team"] = s.team.name
+        metric["rank"] = s.rank
+        metric["kind"] = s.metric.kind
+        metric["percentage"] = s.metric.percentage
+        response[s.season_id][s.rank] << metric
+      else
+        metric = Hash.new
+        metric[s.metric.metric] = s.quantity
+        metric["team"] = s.team.name
+        metric["rank"] = s.rank
+        metric["kind"] = s.metric.kind
+        metric["percentage"] = s.metric.percentage
+        response[s.season_id][s.rank] << metric
+      end
+    end
+    response
+    #end#
+
   end
 end

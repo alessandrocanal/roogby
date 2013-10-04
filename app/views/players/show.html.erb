@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col-md-5">
         <a href="#" class="thumbnail">
-            <img alt="<%= @player.name%>" src="/assets/<%=@player.team_id %>/players/<%= @player.headshot %>" />
+            <img alt="<%= @player.name%>" src="<%= asset_path @img_url %>" />
         </a>
       </div>
       <div class="col-md-7">
