@@ -570,4 +570,57 @@ namespace :first_import do
 
   end
 
+  desc "COMPETITIONS STANDINGS IMPORT"
+  task :competitions_standings => :environment do
+    require 'nokogiri'
+    require 'open-uri'
+
+    docs = Array.new
+
+    docs[0] = 'http://playground.opta.net/competition.php?competition=214&season_id=2013&feed_type=RU2'
+    docs[1] = 'http://playground.opta.net/competition.php?competition=215&season_id=2011&feed_type=RU2'
+
+    docs.each do |d|
+      doc = Nokogiri::XML(open(d))
+      comp = doc.xpath("table/comp")
+      competition_id = comp.xpath("@id").text
+      competition_official_name = comp.xpath("@long_name").text
+      season_id = comp.xpath("@season_id").text
+
+      groups = comp.xpath("group")
+      groups.each do |group|
+        group_name = group.xpath("@name").text
+
+        teams = group.xpath("team")
+        teams.each do |t|
+          new_competition_standing = Hash.new
+          new_competition_standing[:team_id] = t.xpath("@id").text
+          new_competition_standing[:season_id] = season_id
+          new_competition_standing[:competition_id] = competition_id
+          new_competition_standing[:official_competition_name] = competition_official_name
+          new_competition_standing[:against] = t.xpath("@against").text
+          new_competition_standing[:bonus] = t.xpath("@bonus").text
+          new_competition_standing[:byes] = t.xpath("@byes").text rescue 0
+          new_competition_standing[:drawn] = t.xpath("@drawn").text
+          new_competition_standing[:for] = t.xpath("@for").text
+          new_competition_standing[:group_name] = group_name
+          new_competition_standing[:losingbonus] = t.xpath("@losingbonus").text
+          new_competition_standing[:lost] = t.xpath("@lost").text
+          new_competition_standing[:played] = t.xpath("@played").text
+          new_competition_standing[:points] = t.xpath("@points").text
+          new_competition_standing[:pointsdiff] = t.xpath("@pointsdiff").text
+          new_competition_standing[:rank] = t.xpath("@rank").text
+          new_competition_standing[:triesagainst] = t.xpath("@triesagainst").text
+          new_competition_standing[:triesbonus] = t.xpath("@triesbonus").text
+          new_competition_standing[:triesfor] = t.xpath("@triesfor").text
+          new_competition_standing[:won] = t.xpath("@won").text
+
+          cs = CompetitionsStanding.new(new_competition_standing)
+          if cs.valid?
+            cs.save
+          end
+        end
+      end
+    end
+  end
 end

@@ -1,0 +1,14 @@
+<%= render :partial => "/shared/menu" %>
+<div class="row">
+  <div class="col-md-12">
+    <% @competitions.each do |season, competitions| %>
+        <h3><span class="label label-primary"><%= season %></span></h3>
+        <ul class="list-inline">
+        <% competitions.each do |c| %>
+            <li><%= link_to c["name"], competition_path(:id=>c["id"], :season_id=>season) %></li>
+        <% end %>
+        </ul>
+  <% end %>
+  </div>
+</div>
+

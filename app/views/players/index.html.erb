@@ -1,0 +1,13 @@
+<%= render :partial => "/shared/menu" %>
+<div class="row">
+  <div class="col-md-12">
+    <% @players.each do |team, players| %>
+        <h3><span class="label label-primary"><%= team %></span></h3>
+        <ul class="list-inline">
+          <% players.each do |p| %>
+              <li><%= link_to p.name, player_path(:id=>p.id) %></li>
+          <% end %>
+        </ul>
+    <% end %>
+  </div>
+</div>

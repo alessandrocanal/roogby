@@ -56,51 +56,66 @@ class CompetitionsTeamsMetric < ActiveRecord::Base
       end
 
     end
-    Rails.logger.debug("RESP------->#{response}")
+    #Rails.logger.debug("RESP------->#{response}")
     response
     #end#
   end
 
-  def competition_teams_stats(competition_id, season_id)
-    #Rails.cache.fetch("competition_teams_stats_ranking_"+competition_id.to_s+"_"+season_id.to_s, :expires_in => 7.days) do
+  def competitions_for_sitemap
+    #Rails.cache.fetch("competitions_for_sitemap", :expires_in => 1.day) do
+    response = Hash.new
+    competitions = CompetitionsTeamsMetric.includes(:competition).group("season_id, competitions.id").order("season_id DESC")
+    competitions.each do |c|
+      if response[c.season_id].blank?
+        response[c.season_id] = Array.new
+        competition = Hash.new
+        competition["name"] = c.competition.name
+        competition["id"] = c.competition.id
+        response[c.season_id] << competition
+      else
+        competition = Hash.new
+        competition["name"] = c.competition.name
+        competition["id"] = c.competition.id
+        response[c.season_id] << competition
+      end
+    end
+    Rails.logger.debug("RESP------->#{response}")
+    response
+    #end
+  end
+
+
+  def competition_best_and_worst_teams_stats(competition_id, season_id)
+    #Rails.cache.fetch("competition_best_and_worst_teams_stats_"+competition_id.to_s+"_"+season_id.to_s, :expires_in => 7.days) do
     response = Hash.new
     if season_id != "all"
-      stats = CompetitionsTeamsMetric.includes(:metric, :team).where("competition_id=? AND season_id=?", competition_id, season_id).order("rank ASC,metric_id ASC")
+      stats = CompetitionsTeamsMetric.includes(:metric, :team).where("competition_id=? AND season_id=? AND rank=1", competition_id, season_id).order("metrics.kind ASC, metric_id ASC")
     else
-      stats = CompetitionsTeamsMetric.includes(:metric, :team).where("competition_id=?", competition_id).order("season_id DESC,rank ASC,metric_id ASC")
+      stats = CompetitionsTeamsMetric.includes(:metric, :team).where("competition_id=? AND rank=1", competition_id).order("season_id DESC, metrics.kind ASC,metric_id ASC")
     end
     stats.each do |s|
       if response[s.season_id].blank?
-        response[s.season_id] = Hash.new
-        rank = Hash.new
-        rank[s.rank] = Array.new
+        response[s.season_id] = Array.new
+
         metric = Hash.new
         metric[s.metric.metric] = s.quantity
-        metric["team"] = s.team.name
-        metric["rank"] = s.rank
+        metric["team"] = s.team.name rescue "NA"
+        metric["team_id"] = s.team_id
         metric["kind"] = s.metric.kind
         metric["percentage"] = s.metric.percentage
-        rank[s.rank] << metric
-        response[s.season_id] = rank
-      elsif response[s.season_id][s.rank].blank?
-        response[s.season_id][s.rank] = Array.new
-        metric = Hash.new
-        metric[s.metric.metric] = s.quantity
-        metric["team"] = s.team.name
-        metric["rank"] = s.rank
-        metric["kind"] = s.metric.kind
-        metric["percentage"] = s.metric.percentage
-        response[s.season_id][s.rank] << metric
+        response[s.season_id] << metric
+
       else
         metric = Hash.new
         metric[s.metric.metric] = s.quantity
-        metric["team"] = s.team.name
-        metric["rank"] = s.rank
+        metric["team"] = s.team.name rescue "NA"
+        metric["team_id"] = s.team_id
         metric["kind"] = s.metric.kind
         metric["percentage"] = s.metric.percentage
-        response[s.season_id][s.rank] << metric
+        response[s.season_id] << metric
       end
     end
+    Rails.logger.debug("RESP------->#{response}")
     response
     #end#
 

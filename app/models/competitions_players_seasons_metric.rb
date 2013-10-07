@@ -48,7 +48,7 @@ class CompetitionsPlayersSeasonsMetric < ActiveRecord::Base
 
       end
     end
-    Rails.logger.debug("RESP--------->#{response}")
+    #Rails.logger.debug("RESP--------->#{response}")
     response
     #end
   end

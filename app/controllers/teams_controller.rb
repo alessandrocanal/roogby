@@ -1,10 +1,23 @@
 class TeamsController < ApplicationController
 
+  def index
+    t = Team.new
+
+    @teams = t.teams_for_sitemap
+    render :layout => 'team'
+
+  end
+
   def show
     @team = Team.find(params[:id])
     @div_match_title = "Matches by season"
-    @div_stats_title = "Statistics by season"
-    @div_stats_rank = "Statistics rank by season"
+    @div_stats_title = "Competitions stats"
+    @div_stats_rank = "Competitions stats rank"
+    if !@team.jersey.blank?
+      @img_url = "#{@team.id}"+"/"+"#{@team.jersey}"
+    else
+      @img_url = 'jersey.png'
+    end
 
     m = Match.new
 
@@ -16,9 +29,9 @@ class TeamsController < ApplicationController
     if !session[:season_id].blank?
       @div_match_title = "Matches in "+session[:season_id]
       @matches = m.team_matches(params[:id], session[:season_id])
-      @div_stats_title = "Stats of "+session[:season_id]
+      @div_stats_title = "Competitions stats in  "+session[:season_id]
       @stats = ctsm.team_stats(params[:id], session[:season_id])
-      @div_stats_rank = "Stats rank of "+session[:season_id]
+      @div_stats_rank = "Competitions stats rank in "+session[:season_id]
       @stats_rank = ctm.team_stats(params[:id], session[:season_id])
 
     else

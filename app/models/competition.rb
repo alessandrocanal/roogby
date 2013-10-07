@@ -8,6 +8,7 @@ class Competition < ActiveRecord::Base
   has_many :competitions_teams_metrics
   has_many :competitions_players_seasons_metrics
   has_many :competitions_teams_seasons_metrics
+  has_many :competitions_standings
 
   def typeheadsearch_competition
     Rails.cache.fetch("typeaheadsearch_competition", :expires_in => 1.day) do

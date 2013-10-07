@@ -6,6 +6,7 @@ class Team < ActiveRecord::Base
 
   has_many :competitions_teams_metrics
   has_many :competitions_players_seasons_metrics
+  has_many :competitions_standings
 
   validates :id, :uniqueness => true
 
@@ -22,5 +23,14 @@ class Team < ActiveRecord::Base
       end
       response
     end
+  end
+
+  def teams_for_sitemap
+    #Rails.cache.fetch("teams_for_sitemap", :expires_in => 7.day) do
+    response = Team.order("name ASC")
+
+    response
+    #end
+
   end
 end

@@ -19,9 +19,9 @@ class CompetitionsPlayersMetric < ActiveRecord::Base
     #Rails.cache.fetch("player_stats_rank_"+player_id.to_s+"_"+season_id.to_s, :expires_in => 7.days) do
     response = Hash.new
     if season_id != "all"
-      stats = CompetitionsPlayersMetric.includes(:metric, :competition).where("player_id=? AND season_id=?", player_id, season_id).order("competition_id DESC, metric_id ASC")
+      stats = CompetitionsPlayersMetric.includes(:metric, :competition).where("player_id=? AND season_id=?", player_id, season_id).order("competition_id DESC, metrics.kind ASC, rank ASC, metric_id ASC")
     else
-      stats = CompetitionsPlayersMetric.includes(:metric, :competition).where("player_id=?", player_id).order("season_id DESC, competition_id DESC, metrics.kind ASC,metric_id ASC")
+      stats = CompetitionsPlayersMetric.includes(:metric, :competition).where("player_id=?", player_id).order("season_id DESC, competition_id DESC, metrics.kind ASC, rank ASC, metric_id ASC")
     end
     stats.each do |s|
       #Rails.logger.debug("RESP--------->#{s.to_yaml}")
@@ -33,6 +33,7 @@ class CompetitionsPlayersMetric < ActiveRecord::Base
         metric = Hash.new
         metric[s.metric.metric] = s.quantity
         metric["rank"] = s.rank
+        metric["kind"] = s.metric.kind
         competition[s.competition.name] << metric
         response[s.season_id] = competition
 
@@ -41,13 +42,50 @@ class CompetitionsPlayersMetric < ActiveRecord::Base
         metric = Hash.new
         metric[s.metric.metric] = s.quantity
         metric["rank"] = s.rank
+        metric["kind"] = s.metric.kind
 
         response[s.season_id][s.competition.name] << metric
       else
         metric = Hash.new
         metric[s.metric.metric] = s.quantity
         metric["rank"] = s.rank
+        metric["kind"] = s.metric.kind
         response[s.season_id][s.competition.name] << metric
+
+      end
+    end
+    response
+    #end
+
+  end
+
+  def competitions_best_and_worst_players_stats(competition_id, season_id)
+    #Rails.cache.fetch("competitions_best_and_worst_players_stats_"+competition_id.to_s+"_"+season_id.to_s, :expires_in => 7.days) do
+    response = Hash.new
+    if season_id != "all"
+      stats = CompetitionsPlayersMetric.includes(:metric, :player).where("competition_id=? AND season_id=? AND rank=1", competition_id, season_id).order("metrics.kind ASC, metric_id ASC")
+    else
+      stats = CompetitionsPlayersMetric.includes(:metric, :player).where("competition_id=? AND rank=1", competition_id).order("season_id DESC, metrics.kind ASC,metric_id ASC")
+    end
+    stats.each do |s|
+      #Rails.logger.debug("RESP--------->#{s.to_yaml}")
+      if response[s.season_id].blank?
+        response[s.season_id] = Array.new
+        #Rails.logger.debug("Comp------>#{s.competition.name}")
+
+        metric = Hash.new
+        metric[s.metric.metric] = s.quantity
+        metric["player_id"] = s.player_id
+        metric["player"] = s.player.name rescue "NA"
+        metric["kind"] = s.metric.kind
+        response[s.season_id] << metric
+      else
+        metric = Hash.new
+        metric[s.metric.metric] = s.quantity
+        metric["player_id"] = s.player_id
+        metric["player"] = s.player.name rescue "NA"
+        metric["kind"] = s.metric.kind
+        response[s.season_id] << metric
 
       end
     end

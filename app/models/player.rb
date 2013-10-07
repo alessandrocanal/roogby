@@ -26,4 +26,26 @@ class Player < ActiveRecord::Base
       response
     end
   end
+
+  def players_for_sitemap
+    #Rails.cache.fetch("players_for_sitemap", :expires_in => 1.day) do
+    response = Hash.new
+    players = Player.includes(:team).order("team_id ASC, last_name ASC")
+    players.each do |p|
+      if p.team.nil?
+        response["team name unavailable"] = Array.new
+        response["team name unavailable"] << p
+      elsif response[p.team.name].blank?
+        response[p.team.name] = Array.new
+        response[p.team.name] << p
+      else
+        response[p.team.name] << p
+      end
+    end
+
+    Rails.logger.debug("RESP----->#{response}")
+    response
+    #end
+
+  end
 end

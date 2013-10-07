@@ -58,39 +58,29 @@
 
   <div class="col-md-4">
     <h3 style="text-align:center;"><span class="label label-primary"><%= @div_stats_rank%></span></h3>
-    <% if @stats_rank.count == 1 %>
-        <ul class="list-group" >
-          <% @stats_rank.each do |k,v| %>
-              <% v.each do |comp_k, comp_v| %>
-                  <% comp_v.each do |metric|  %>
-                      <% if metric["rank"] == 1 %>
-                          <li class="list-group-item"><span class="glyphicon glyphicon-star-empty"></span>&nbsp;<span class="badge"><%=metric[metric.keys.first]%></span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank: 1)</li>
-                      <% else %>
-                          <li class="list-group-item"><span class="badge"><%=metric[metric.keys.first]%></span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank:&nbsp;<%=metric["rank"] %>)</li>
-                      <% end %>
-                  <% end %>
-              <% end %>
-          <% end %>
-        </ul>
-    <% else %>
         <div id="stats-rank-accordion">
           <% @stats_rank.each do |k,v| %>
               <% v.each do |comp_k, comp_v| %>
                   <h3><%= k.to_s+"-"+comp_k %></h3>
                   <ul class="list-group"  style="padding:0px; border:0px;">
                     <% comp_v.each do |metric|  %>
-                        <% if metric["rank"] == 1 %>
+                        <% if metric["rank"] == 1  && metric["kind"] != 2%>
                             <% if metric["percentage"] == 1 %>
-                                <li class="list-group-item"><span class="glyphicon glyphicon-star-empty"></span>&nbsp;<span class="badge"><%=(metric[metric.keys.first]*100).to_i%>%</span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank: 1)</li>
+                                <li class="list-group-item"><span class="glyphicon glyphicon-star-empty"></span> <span class="badge"><%=(metric[metric.keys.first]*100).to_i%>%</span><%= t 'metric.'+metric.keys.first.to_s%> <em>(rank: 1)</em></li>
                             <% else %>
-                                <li class="list-group-item"><span class="glyphicon glyphicon-star-empty"></span>&nbsp;<span class="badge"><%=metric[metric.keys.first].to_i%></span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank: 1)</li>
+                                <li class="list-group-item"><span class="glyphicon glyphicon-star-empty"></span> <span class="badge"><%=metric[metric.keys.first].to_i%></span><%= t 'metric.'+metric.keys.first.to_s%> <em>(rank: 1)</em></li>
                             <% end %>
-
+                        <% elsif metric["kind"] == 2 %>
+                            <% if metric["percentage"] == 1 %>
+                                <li class="list-group-item"><span class="glyphicon glyphicon-thumbs-down"></span> <span class="badge"><%=(metric[metric.keys.first]*100).to_i%>%</span><%= t 'metric.'+metric.keys.first.to_s%> <em>(rank: <%=metric["rank"] %>)</em></li>
+                            <% else %>
+                                <li class="list-group-item"><span class="glyphicon glyphicon-thumbs-down"></span> <span class="badge"><%=metric[metric.keys.first].to_i%></span><%= t 'metric.'+metric.keys.first.to_s%> <em>(rank: <%=metric["rank"] %>)</em></li>
+                            <% end %>
                         <% else %>
                             <% if metric["percentage"] == 1 %>
-                                <li class="list-group-item"><span class="badge"><%=(metric[metric.keys.first]*100).to_i%>%</span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank:&nbsp;<%=metric["rank"] %>)</li>
+                                <li class="list-group-item"><span class="badge"><%=(metric[metric.keys.first]*100).to_i%>%</span><%= t 'metric.'+metric.keys.first.to_s%> <em>(rank: <%=metric["rank"] %>)</em></li>
                             <% else %>
-                                <li class="list-group-item"><span class="badge"><%=metric[metric.keys.first].to_i%></span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank:&nbsp;<%=metric["rank"] %>)</li>
+                                <li class="list-group-item"><span class="badge"><%=metric[metric.keys.first].to_i%></span><%= t 'metric.'+metric.keys.first.to_s%> <em>(rank: <%=metric["rank"] %>)</em></li>
                             <% end %>
                         <% end %>
                     <% end %>
@@ -98,7 +88,6 @@
               <% end %>
           <% end %>
         </div>
-    <% end %>
   </div>
   <div class="col-md-4">
     <h3 style="text-align:center;"><span class="label label-primary"><%= @div_competition_stats %></span></h3>

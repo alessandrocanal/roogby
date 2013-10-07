@@ -3,7 +3,7 @@
   <div class="col-md-4">
     <h3 style="text-align:center;"><span class="label label-primary"><%= @team.name%></span></h3>
       <a href="#" class="thumbnail">
-        <img alt="<%= @team.name%>" src="/assets/<%=@team.id %>/<%= @team.jersey %>" />
+        <img alt="<%= @team.name%>" src="<%=asset_path @img_url%>" />
       </a>
     <div class="row">
       <div class="col-md-12">
@@ -33,21 +33,7 @@
   </div>
 
   <div class="col-md-4"><h3 style="text-align:center;"><span class="label label-primary"><%= @div_stats_rank %></span></h3>
-    <% if @stats_rank.count == 1 %>
-        <ul class="list-group" >
-          <% @stats_rank.each do |k,v| %>
-              <% v.each do |comp_k, comp_v| %>
-                  <% comp_v.each do |metric|  %>
-                      <% if metric["rank"] == 1 %>
-                          <li class="list-group-item"><span class="glyphicon glyphicon-star-empty"></span>&nbsp;<span class="badge"><%=metric[metric.keys.first]%></span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank: 1)</li>
-                      <% else %>
-                          <li class="list-group-item"><span class="badge"><%=metric[metric.keys.first]%></span><%= t 'metric.'+metric.keys.first.to_s%>&nbsp;(rank:&nbsp;<%=metric["rank"] %>)</li>
-                      <% end %>
-                  <% end %>
-              <% end %>
-          <% end %>
-        </ul>
-    <% else %>
+
         <div id="stats-rank-accordion">
           <% @stats_rank.each do |k,v| %>
               <% v.each do |comp_k, comp_v| %>
@@ -73,43 +59,12 @@
               <% end %>
           <% end %>
         </div>
-    <% end %>
 
 
   </div>
   <div class="col-md-4">
     <h3><span class="label label-primary"><%= @div_stats_title%></span></h3>
-    <% if @stats.count == 1 %>
-        <div><ul class="list-group">
-        <% @stats.each do |k,v| %>
-            <% v.each do |comp_k, comp_v| %>
 
-                  <% comp_v.each do |metric|  %>
-                      <% if metric["kind"] == 1 %>
-                          <% if metric["percentage"] == 1 %>
-                              <li class="list-group-item"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;<span class="badge"><%=(metric[metric.keys.first] *100).to_i%>%</span><%= t 'metric.'+metric.keys.first.to_s%></li>
-                          <% else %>
-                            <li class="list-group-item"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;<span class="badge"><%=metric[metric.keys.first].to_i%></span><%= t 'metric.'+metric.keys.first.to_s%></li>
-                          <% end %>
-                      <% elsif metric["kind"] == 2 %>
-                          <% if metric["percentage"] == 1 %>
-                              <li class="list-group-item"><span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;<span class="badge"><%=(metric[metric.keys.first]*100).to_i%>%</span><%= t 'metric.'+metric.keys.first.to_s%></li>
-                          <% else %>
-                            <li class="list-group-item"><span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;<span class="badge"><%=metric[metric.keys.first].to_i%></span><%= t 'metric.'+metric.keys.first.to_s%></li>
-                          <% end %>
-                      <% else %>
-                          <% if metric["percentage"] == 1 %>
-                              <li class="list-group-item"><span class="badge"><%=(metric[metric.keys.first]*100).to_i%>%</span><%= t 'metric.'+metric.keys.first.to_s%></li>
-                          <% else %>
-                            <li class="list-group-item"><span class="badge"><%=metric[metric.keys.first].to_i%></span><%= t 'metric.'+metric.keys.first.to_s%></li>
-                          <% end %>
-                      <% end %>
-                  <% end %>
-
-            <% end %>
-        <% end %>
-        </ul></div>
-    <% else %>
         <div id="stats-accordion">
           <% @stats.each do |k,v| %>
               <% v.each do |comp_k, comp_v| %>
@@ -141,7 +96,6 @@
           <% end %>
 
         </div>
-    <% end %>
 
   </div>
 </div>

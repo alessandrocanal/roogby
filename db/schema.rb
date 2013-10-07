@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131002064623) do
+ActiveRecord::Schema.define(:version => 20131006095623) do
 
   create_table "competitions", :force => true do |t|
     t.string   "name"
@@ -51,6 +51,30 @@ ActiveRecord::Schema.define(:version => 20131002064623) do
   add_index "competitions_players_seasons_metrics", ["competition_id"], :name => "index_competitions_players_seasons_metrics_on_competition_id"
   add_index "competitions_players_seasons_metrics", ["metric_id"], :name => "index_competitions_players_seasons_metrics_on_metric_id"
   add_index "competitions_players_seasons_metrics", ["player_id"], :name => "index_competitions_players_seasons_metrics_on_player_id"
+
+  create_table "competitions_standings", :force => true do |t|
+    t.integer  "team_id"
+    t.integer  "competition_id"
+    t.string   "official_competition_name"
+    t.integer  "against"
+    t.integer  "bonus"
+    t.integer  "byes",                      :default => 0
+    t.integer  "drawn"
+    t.integer  "for"
+    t.string   "group_name"
+    t.integer  "losingbonus"
+    t.integer  "lost"
+    t.integer  "played"
+    t.integer  "points"
+    t.integer  "pointsdiff"
+    t.integer  "rank"
+    t.integer  "triesagainst"
+    t.integer  "triesbonus"
+    t.integer  "triesfor"
+    t.integer  "won"
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+  end
 
   create_table "competitions_teams_metrics", :force => true do |t|
     t.integer  "competition_id"
