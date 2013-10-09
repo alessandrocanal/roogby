@@ -9,7 +9,7 @@ class TeamsController < ApplicationController
   end
 
   def show
-    @team = Team.find(params[:id])
+    @team = Team.find(params[:id]) rescue Team.new
     @div_match_title = "Matches by season"
     @div_stats_title = "Competitions stats"
     @div_stats_rank = "Competitions stats rank"

@@ -43,4 +43,9 @@ class MatchesController < ApplicationController
 
     render :layout => 'match'
   end
+
+  def live
+
+    render :layout => 'match'
+  end
 end

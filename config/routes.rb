@@ -8,7 +8,12 @@ Roogby::Application.routes.draw do
   end
 
   resources :players
-  resources :matches
+  resources :matches do
+    collection do
+      match 'live' => 'matches#live', :via => :get
+    end
+  end
+
   resources :teams
   resources :competitions
 

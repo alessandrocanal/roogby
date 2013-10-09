@@ -10,8 +10,8 @@
                       <li class="active"><a href="<%= players_path %>">Players</a></li>
                       <li class="active"><a href="<%= teams_path %>">Teams</a></li>
                       <li class="active"><a href="<%= competitions_path %>">Competitions</a></li>
-                      <li class="active"><a href="#">Live matches!</a></li>
-                      <li class="active"><a href="#">About</a></li>
+                      <li class="active"><a href="<%= live_matches_path %>">Live matches!</a></li>
+                      <!--<li class="active"><a href="#">About</a></li>-->
                     </ul>
                 </div>
             </div>
@@ -29,12 +29,12 @@
             <p class="disclaimer">The easiest and quickest way to retrieve informations about rugby's world</p>
             <% if !flash[:error].blank? %>
               <div class="alert alert-danger">
-                Ehy! Didn't you find what you search? Take a look at our <a href="#" class="alert-link">players' page</a> or <a href="#" class="alert-link">teams' page</a>
+                Ehy! Didn't you find what you search? Take a look at our <a href="<%= players_path %>" class="alert-link">players' page</a> or <a href="<%= teams_path %>" class="alert-link">teams' page</a> or <a href="<%= competitions_path %>" class="alert-link">competitions' page</a>
               </div>
             <% end %>
             <%= form_tag traffic_redirection_pages_path, :method => :post, :class => '', :id => 'home-search-form' do %>
               <div class="row">
-                <div class="col-md-6"><input type="text" class="form-control typeahead roogby-finder" id="form-wide-name" placeholder="Players, Teams, Competition ..." name="search_text"></div>
+                <div class="col-md-6"><input type="text" class="form-control typeahead roogby-finder" id="form-wide-name" placeholder="Player, Team, Competition ..." name="search_text"></div>
                 <div class="col-md-4"><%= select_tag "season", content_tag(:option,'Select season...',:value=>"")+options_from_collection_for_select(@seasons , "id", "season"), :class=>"form-control" %></div>
                 <div class="col-md-2"><%= hidden_field_tag "page_kind" %><%= hidden_field_tag "value_id" %></div>
               <button type="button" class="btn btn-default" id="home-search-button">Search</button>
