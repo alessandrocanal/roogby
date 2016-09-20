@@ -1,6 +1,4 @@
 class CompetitionsStanding < ActiveRecord::Base
-  attr_accessible :team_id, :season_id, :competition_id, :official_competition_name, :against, :bonus, :byes, :drawn, :for, :group_name, :losingbonus, :lost, :played, :points, :pointsdiff, :rank, :triesagainst, :triesbonus, :triesfor, :won
-
   belongs_to :competition
   belongs_to :team
   belongs_to :season

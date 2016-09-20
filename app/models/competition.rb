@@ -1,5 +1,4 @@
 class Competition < ActiveRecord::Base
-  attr_accessible :id, :name, :short_name, :long_name
 
   validates :id, :uniqueness => true
 

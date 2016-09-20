@@ -1,6 +1,4 @@
 class CompetitionsTeamsMetric < ActiveRecord::Base
-  attr_accessible :competition_id, :metric_id, :season_id, :team_id, :quantity, :rank
-
   belongs_to :competition
   belongs_to :team
   belongs_to :season

@@ -1,49 +1,23 @@
-# Sample localization file for English. Add more files in this directory for other locales.
-# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
 
 en:
   hello: "Hello world"
-  metric:
-    bad_passes: "Bad passes"
-    carries: "Ball carries"
-    clean_breaks: "Breaks to the line of defence"
-    conversion_goals: "Success conversion goals"
-    defenders_beaten: "Defenders eluded"
-    drop_goals_converted: "Success drop goals"
-    kicks_from_hand: "Kicks from open play"
-    lineout_won_steal: "Lineouts won on opponents throw"
-    lineouts_to_own_player: "Lineouts won on own throw"
-    metres: "Metres advanced across the gain line"
-    minutes_played_total: "Total minutes played"
-    missed_conversion_goals: "Missed conversion goals"
-    missed_penalty_goals: "Missed penalty kicks"
-    missed_tackles: "Missed tackles"
-    offload: "Offloads"
-    passes: "Completed passes"
-    pen_defs: "Penalties kicked on defensive"
-    pen_offs: "Penalties kicked on offensive"
-    penalty_goals: "Success penalty kicks"
-    points: "Points accumulated"
-    tackles: "Success tackles"
-    tries: "Tries"
-    try_assist: "Try assists"
-    turnovers_conceded: "Turnovers conceded"
-    yellow_cards: "Yellow cards"
-    lineouts_Lost: "Lineouts lost"
-    lineouts_won: "Lineouts won on opponents throw"
-    offloads: "Offloads"
-    penalty_goals: "Success penalty kicks"
-    penalty_tries: "Penalty tries"
-    player_tries: "Tries"
-    rucks_lost: "Rucks lost"
-    rucks_success: "Ruck success as a percentage"
-    rucks_total: "Rucks a team has been involved in"
-    rucks_won: "Rucks won"
-    scrums_lost: "Scrums lost"
-    scrums_success: "Scrum success as a percentage"
-    scrums_total: "Scrums a team has been involved in"
-    scrums_won: "Scrums won"
-    total_games: "Total games played"
-    total_tackle_attempts: "Total tackles attempted"
-    total_tries: "Total tries scored"
-

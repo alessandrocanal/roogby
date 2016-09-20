@@ -1,6 +1,4 @@
 class Player < ActiveRecord::Base
-  attr_accessible :team_id, :id, :first_name, :last_name, :headshot, :date_of_birth, :height, :weight, :name, :profile, :position, :comments, :team_id
-
   belongs_to :team
 
   has_many :matches_events

@@ -1,6 +1,4 @@
 class CompetitionsTeamsSeasonsMetric < ActiveRecord::Base
-  attr_accessible :metric_id, :competition_id, :season_id, :team_id, :quantity
-
   validates_uniqueness_of :metric_id, :scope => [:competition_id, :team_id, :season_id]
 
   belongs_to :metric
